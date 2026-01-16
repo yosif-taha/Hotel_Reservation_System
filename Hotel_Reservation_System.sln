@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36705.20 d17.14
+VisualStudioVersion = 17.14.36705.20
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel_Reservation_System.Web", "Hotel_Reservation_System.Web\Hotel_Reservation_System.Web.csproj", "{E8AA6F22-64EB-4BC0-9D72-E518D669BE41}"
 EndProject
@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{02EA681E-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{369CB01D-A1A7-72D2-AABC-3F0945D148A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel.Domin", "Hotel.Domin\Hotel.Domin.csproj", "{2F78FFAA-6E31-446B-B155-4CBAB188ADED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel.Domain", "Hotel.Domin\Hotel.Domain.csproj", "{2F78FFAA-6E31-446B-B155-4CBAB188ADED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel.Services", "Hotel.Services\Hotel.Services.csproj", "{B84D1BE8-70C1-44E6-9589-1EC4805CF89E}"
 EndProject
