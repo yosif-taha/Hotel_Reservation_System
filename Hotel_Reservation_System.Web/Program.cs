@@ -1,6 +1,19 @@
 
+using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Hotel.Domain.Contracts;
 using Hotel.Persistence.Data.Contexts;
+using Hotel.Persistence.Repositories;
+using Hotel.Presentation.Controllers;
+using Hotel.Presentation.Validations.Rooms;
+using Hotel.Services.Abstractions;
+using Hotel.Services.Mapper.Rooms;
+using Hotel.Services.Rooms;
+using Hotel_Reservation_System.Web.Middlewares;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
 
 namespace Hotel_Reservation_System.Web
 {
@@ -19,6 +32,16 @@ namespace Hotel_Reservation_System.Web
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddControllers()
+                            .AddApplicationPart(typeof(RoomController).Assembly);
+            builder.Services.AddValidatorsFromAssemblyContaining<GetAllRoomsWithPaginationViewModelValidator>();
+
+            builder.Services.AddScoped<IRoomService,RoomService>();
+            builder.Services.AddScoped<IRoomRepository,RoomRepository>();
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<TransactionMiddleware>();
+            builder.Services.AddAutoMapper(typeof(RoomProfile).Assembly);
+
 
             var app = builder.Build();
 
@@ -30,6 +53,7 @@ namespace Hotel_Reservation_System.Web
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<TransactionMiddleware>();
 
             app.UseAuthorization();
 
