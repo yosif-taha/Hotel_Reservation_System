@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Hotel.Shared.ViewModels.Rooms;
+using Hotel.Presentation.ViewModels.Rooms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
