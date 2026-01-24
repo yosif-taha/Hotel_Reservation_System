@@ -21,16 +21,10 @@ namespace Hotel.Persistence.Repositories
             return result;
         }
 
-        public IQueryable GetById(Guid id)
+        public  IQueryable GetById(Guid id)
         {
-         var result =  _context.Set<T>().Where(e => e.Id == id);
+         var result = _context.Set<T>().Where(x => x.Id == id);
            return result;
-        }
-
-        public async Task<T> GetValueAsync(Guid id)
-        {
-          var result = await  _context.Set<T>().FindAsync(id);   
-            return result!;
         }
 
         public async Task AddAsync(T entity)
@@ -74,7 +68,7 @@ namespace Hotel.Persistence.Repositories
             if (local == null)
             {
                 var entity = Activator.CreateInstance<T>(); // Create a new instance of T 
-                entity.Id = id;
+                entity.Id= id;
 
                 _context.Set<T>().Attach(entity);
                 entry = _context.Entry(entity);

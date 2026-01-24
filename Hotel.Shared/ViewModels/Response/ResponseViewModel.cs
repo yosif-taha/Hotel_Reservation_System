@@ -9,5 +9,6 @@ namespace Hotel.Shared.ViewModels.Response
     public abstract class ResponseViewModel
     {
         public bool IsSuccess { get; set; }
+        public string? Message { get; set; }
     }
 }

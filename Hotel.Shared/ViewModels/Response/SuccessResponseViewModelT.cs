@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 
 namespace Hotel.Shared.ViewModels.Response
 {
-    public class SuccessResponseViewModel: ResponseViewModel
+    public class SuccessResponseViewModelT<T> : ResponseViewModel
     {
-        public SuccessResponseViewModel(string message) 
+        public T Data { get; set; }
+        public SuccessResponseViewModelT(T data , String message) 
         {
             IsSuccess = true;
+            Data = data;
             Message = message;
         }
-        public SuccessResponseViewModel() 
+        public SuccessResponseViewModelT(T data ) 
         {
             IsSuccess = true;
+            Data = data;
         }
     }
 }

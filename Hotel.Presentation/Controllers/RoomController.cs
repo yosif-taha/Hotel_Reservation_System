@@ -3,6 +3,7 @@ using Hotel.Presentation.Validations.Rooms;
 using Hotel.Services.Abstractions;
 using Hotel.Shared.Dtos.Rooms;
 using Hotel.Shared.Helpers;
+using Hotel.Shared.ResultPattern;
 using Hotel.Shared.ViewModels.Response;
 using Hotel.Shared.ViewModels.Rooms;
 using Microsoft.AspNetCore.Mvc;
@@ -21,30 +22,31 @@ namespace Hotel.Presentation.Controllers
     public class RoomController(IRoomService _roomService, IMapper _mapper) : ControllerBase
     {
         [HttpGet("GetAll")]
-        public ResponseViewModel GetRooms([FromQuery] GetAllRoomsWithPaginationViewModel model)
+        public async Task<ResponseViewModel> GetRooms([FromQuery] GetAllRoomsWithPaginationViewModel model)
         {
             var validator = new GetAllRoomsWithPaginationViewModelValidator().Validate(model);
             if (!validator.IsValid) return new FailedResponseViewModel(ErrorType.InvalidRoomData,"Invalid Room Data From Request");
             var requestDto = _mapper.Map<GetAllRoomsWithPaginationDto>(model);
-            var rooms = _roomService.GetAllRooms(requestDto);
-            var items = _mapper.Map<IEnumerable<GetAllRoomsResponseViewModel>>(rooms.Data.Items);
+            var rooms = await _roomService.GetAllRooms(requestDto);
+            var items = _mapper.Map<IEnumerable<GetAllRoomsResponseViewModel>>(rooms.Data);
+            int totalCount = items.Count();
             var result = new PagedResult<GetAllRoomsResponseViewModel>
             {
-                Items = items.ToList(),
-                TotalCount = rooms.Data.TotalCount,
-                PageNumber = rooms.Data.PageNumber,
-                PageSize = rooms.Data.PageSize
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = model.PageNumber,
+                PageSize = model.PageSize,
             };
-            return new SuccessResponseViewModel<PagedResult<GetAllRoomsResponseViewModel>>(result);
+            return new SuccessResponseViewModelT<PagedResult<GetAllRoomsResponseViewModel>>(result);
         }
 
         [HttpGet("GetBy{id}")]
         public async Task<ResponseViewModel> GetRoom(Guid id)
         {
             var result = await _roomService.GetRoomByIdAsync(id);
-            if(!result.IsSuccess) return new FailedResponseViewModel(ErrorType.RoomNotFound, "Room Data Not Found !!");
+            if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.RoomNotFound, "Room Not Found !!");
             var data = _mapper.Map<GetRoomViewModel>(result.Data); 
-            return new SuccessResponseViewModel<GetRoomViewModel>(data);   
+            return new SuccessResponseViewModelT<GetRoomViewModel>(data);   
         }
 
         [HttpPost("Add")]
@@ -55,8 +57,7 @@ namespace Hotel.Presentation.Controllers
             var roomDto = _mapper.Map<AddRoomDto>(addRoom);
             var result = await _roomService.AddRoomAsync(roomDto);
             if (!result.IsSuccess)      return new FailedResponseViewModel(ErrorType.RoomAlreadyExists,"Room Alreagy Exist !!");
-            var dataModel = _mapper.Map<GetRoomViewModel>(result);
-            return new SuccessResponseViewModel<GetRoomViewModel>(dataModel);
+            return new SuccessResponseViewModel();
         }
 
         [HttpPut("Update")]
@@ -66,8 +67,10 @@ namespace Hotel.Presentation.Controllers
             if (!validator.IsValid) return new FailedResponseViewModel(ErrorType.InvalidRoomData,"Invalid Room DataFrom Request");
             var roomDto = _mapper.Map<UpdateRoomDto>(updateRoom);
             var result = await _roomService.UpdateRoomAsync(id, roomDto);
-            if (!result.IsSuccess )         return new FailedResponseViewModel(ErrorType.RoomAlreadyExists, "Room With Data is Already Exists Or Room Not Found");
-            return new SuccessResponseViewModel<string>("Updated Successfully");
+            if (!result.IsSuccess && result.Error.Code == ErrorCode.AlreadyExists)         return new FailedResponseViewModel(ErrorType.RoomAlreadyExists, "New Room Number is Already Exists");
+            if (!result.IsSuccess && result.Error.Code == ErrorCode.NotFound)         return new FailedResponseViewModel(ErrorType.RoomNotFound, "Room Not Found");
+
+            return new SuccessResponseViewModel("Updated Successfully");
         }
 
         [HttpDelete("DeleteBy{id}")]
@@ -76,7 +79,7 @@ namespace Hotel.Presentation.Controllers
             if (id == null) return new FailedResponseViewModel(ErrorType.InvalidRoomId,"Room Id Is Required !!");
              var result = await _roomService.DeleteRoomAsync(id);
             if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.RoomNotFound, "Room Already Not Found!!");
-            return new SuccessResponseViewModel<string>("Deleted Room Successfully");
+            return new SuccessResponseViewModel("Deleted Successfully");
         }
 
         [HttpGet("CkeckAvailabilityBy{id}")]
@@ -84,8 +87,9 @@ namespace Hotel.Presentation.Controllers
         {
             if (id == null) return new FailedResponseViewModel(ErrorType.InvalidRoomId, "Room Id Is Required !!");
             var result = await _roomService.CheckRoomAvailableAsync(id);
-            if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.RoomNotFound, $"Room Is Not Found Or Not Available");
-            return new SuccessResponseViewModel<string>("Room Is Available");
+           if (!result.IsSuccess && result.Error.Code==ErrorCode.NotFound) return new FailedResponseViewModel(ErrorType.RoomNotFound, $"Room Is Not Found");
+           if (!result.IsSuccess && result.Error.Code == ErrorCode.NotAvailable) return new SuccessResponseViewModel("Room Is Not Available");
+            return new SuccessResponseViewModel("Room Is Available");
         }
 
         [HttpPut("SetNotAvailable")]
@@ -93,8 +97,8 @@ namespace Hotel.Presentation.Controllers
         {
             if (id == null) return new FailedResponseViewModel(ErrorType.InvalidRoomId, "Room Id Is Required !!");
             var result =  await _roomService.SetRoomNotAvailableAsync(id);
-            if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.RoomNotFound, $"Room Is Not Found Or Not Available");
-            return new SuccessResponseViewModel<string>($"Room marked as unavailable");
+            if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.RoomNotFound, $"Room Is Not Found");
+            return new SuccessResponseViewModel($"Room marked as unavailable");
         }
 
 

@@ -8,7 +8,6 @@ namespace Hotel.Shared.ViewModels.Response
 {
     public class FailedResponseViewModel : ResponseViewModel
     {
-        public string Message { get; set; }
         public ErrorType ErrorType { get; set; }
 
         public FailedResponseViewModel(ErrorType errorType, string message) 

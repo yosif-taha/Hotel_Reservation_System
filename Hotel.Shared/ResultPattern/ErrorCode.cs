@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Hotel.Shared.ResultPattern
 {
-    public sealed record Error(ErrorCode Code, string Message)
+    public enum ErrorCode
     {
-        public static readonly Error None =
-            new(ErrorCode.NoError, string.Empty);
+       NoError = 0,
+       NotFound = 1,
+       AlreadyExists = 2,   
+       NotAvailable
     }
 }
