@@ -10,6 +10,7 @@ namespace Hotel.Shared.ResultPattern
     {
         public bool IsSuccess { get; }
         public Error Error { get; }
+        public string Message { get; }
 
         protected Result(bool isSuccess, Error error)
         {
@@ -18,6 +19,8 @@ namespace Hotel.Shared.ResultPattern
         }
 
         public static Result Success()
+            => new(true, Error.None);
+        public static Result Success(string message)
             => new(true, Error.None);
 
         public static Result Failure(Error error)

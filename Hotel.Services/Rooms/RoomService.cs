@@ -11,47 +11,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Hotel.Services.Rooms
 {
-    public class RoomService(IGenericRepository<Room> _repository, IRoomRepository _roomRepository, IMapper _mapper) : IRoomService
+    public class RoomService(IGenericRepository<Room> _repository, IRoomRepository _roomRepository,IAsyncQueryExecutor _executor, IMapper _mapper) : IRoomService
     {
-        public ResultT<PagedResult<GetRoomResponseDto>> GetAllRooms(GetAllRoomsWithPaginationDto dto)
+        public  async Task<ResultT<IEnumerable<GetRoomResponseDto>>> GetAllRooms(GetAllRoomsWithPaginationDto dto)
         {
             var query = _repository.GetAll();
             var expression = ExpressionBuilder.BuildFilterExpression<Room, GetAllRoomsWithPaginationDto>(dto);
             if (expression != null) query = query.Where(expression);
             var projectedQuery = query.ProjectTo<GetRoomResponseDto>(_mapper.ConfigurationProvider);
 
-            var totalCount = projectedQuery.Count();
-            var items = projectedQuery
+            var items =  projectedQuery
                 .Skip((dto.PageNumber - 1) * dto.PageSize)
-                .Take(dto.PageSize)
-                .ToList();
-
-            var data = new PagedResult<GetRoomResponseDto>
-            {
-                Items = items,
-                TotalCount = totalCount,
-                PageNumber = dto.PageNumber,
-                PageSize = dto.PageSize
-            };
-            return ResultT<PagedResult<GetRoomResponseDto>>.Success(data);
-
+                .Take(dto.PageSize);
+            var data = await _executor.ToListAsync(items); 
+            return ResultT<IEnumerable<GetRoomResponseDto>>.Success(data);
         }
-
         public async Task<ResultT<GetRoomResponseDto>> GetRoomByIdAsync(Guid id)
         {
-            var data = await _repository.GetValueAsync(id);
-            if (data == null) return ResultT<GetRoomResponseDto>.Failure(new Error("NotFound", "Room IS Not Found !!"));
-            var result = _mapper.Map<GetRoomResponseDto>(data);
+            var data = _repository.GetById(id);
+            var items = data.ProjectTo<GetRoomResponseDto>(_mapper.ConfigurationProvider);
+            var result = await _executor.FirstOrDefaultAsync(items);
+            if (result == null) return ResultT<GetRoomResponseDto>.Failure(new Error(ErrorCode.NotFound, "Room IS Not Found !!")); 
             return ResultT<GetRoomResponseDto>.Success(result);
         }
-
         public async Task<Result> AddRoomAsync(AddRoomDto dto)
         {
             var roomExist = await _roomRepository.ExistsByNumberAsync(dto.RoomNumber);
-            if (roomExist) return Result.Failure(new Error("Duplicate", "Room already exists"));
+            if (roomExist) return Result.Failure(new Error(ErrorCode.AlreadyExists, "Room already exists"));
             var room = _mapper.Map<Room>(dto);
             await _repository.AddAsync(room);
             return Result.Success();
@@ -59,13 +49,13 @@ namespace Hotel.Services.Rooms
 
         public async Task<Result> UpdateRoomAsync(Guid id, UpdateRoomDto updateRoomDto)
         {
-            var data = await _repository.GetValueAsync(id);
-            if (data == null) return ResultT<GetRoomResponseDto>.Failure(new Error("NotFound", "Room IS Not Found !!"));
+            var data = await GetRoomByIdAsync(id);
+            if (!data.IsSuccess) return ResultT<GetRoomResponseDto>.Failure(new Error(ErrorCode.NotFound, "Room IS Not Found !!"));
 
             if (updateRoomDto.RoomNumber.HasValue)
             {
                 var roomExist = await _roomRepository.ExistsByNumberAsync(updateRoomDto.RoomNumber.Value);
-                if (roomExist) return Result.Failure(new Error("Duplicate", "Room already exists"));
+                if (roomExist) return Result.Failure(new Error(ErrorCode.AlreadyExists, "Room already exists"));
             }
             var course = new Room { Id = id };
             var modifiedProps = new List<string>();
@@ -90,20 +80,20 @@ namespace Hotel.Services.Rooms
 
         public async Task<Result> DeleteRoomAsync(Guid id)
         {
-            var data = await _repository.GetValueAsync(id);
-            if (data == null) return ResultT<GetRoomResponseDto>.Failure(new Error("NotFound", "Room IS Not Found !!"));
+            var data = await GetRoomByIdAsync(id);
+            if (!data.IsSuccess) return ResultT<GetRoomResponseDto>.Failure(new Error(ErrorCode.NotFound, "Room IS Not Found !!"));
 
             _repository.SoftDelete(id);
             return Result.Success();
         }
-
+            
         public async Task<Result> CheckRoomAvailableAsync(Guid id)
         {
-            var data = await _repository.GetValueAsync(id);
-            if (data == null) return ResultT<GetRoomResponseDto>.Failure(new Error("NotFound", "Room IS Not Found !!"));
+            var data = await GetRoomByIdAsync(id);
+            if (!data.IsSuccess) return ResultT<GetRoomResponseDto>.Failure(new Error(ErrorCode.NotFound, "Room IS Not Found !!"));
             var flag = await _roomRepository.CheckAvailabilityAsync(id);
-           if (!flag) return Result.Failure(new Error("NotAvailable", $"Room Is Not Available"));
-           return Result.Success();
+           if (!flag) return Result.Failure(new Error(ErrorCode.NotAvailable, $"Room Is Not Available"));
+            return Result.Success();
         }
 
         public async Task<Result> SetRoomNotAvailableAsync(Guid id)

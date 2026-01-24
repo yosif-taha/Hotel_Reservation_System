@@ -12,7 +12,6 @@ namespace Hotel.Domain.Contracts
     {
         IQueryable<T> GetAll();
         IQueryable GetById(Guid id);
-        Task<T> GetValueAsync(Guid id);
         Task AddAsync(T entity);
         void Update(T entity, params string[] modifiedParams);
         void SoftDelete(Guid id);
