@@ -7,8 +7,9 @@ using Hotel.Persistence.Data.Contexts;
 using Hotel.Persistence.Executor;
 using Hotel.Persistence.Repositories;
 using Hotel.Presentation.Controllers;
+using Hotel.Presentation.Mapper.Rooms;
 using Hotel.Presentation.Validations.Rooms;
-using Hotel.Services.Abstractions;
+using Hotel.Services.Interfaces;
 using Hotel.Services.Mapper.Rooms;
 using Hotel.Services.Rooms;
 using Hotel_Reservation_System.Web.Middlewares;
@@ -42,7 +43,8 @@ namespace Hotel_Reservation_System.Web
             builder.Services.AddScoped<IAsyncQueryExecutor,EfAsyncQueryExecutor>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<TransactionMiddleware>();
-            builder.Services.AddAutoMapper(typeof(RoomProfile).Assembly);
+            builder.Services.AddAutoMapper(typeof(RoomDtoProfile).Assembly);
+            builder.Services.AddAutoMapper(typeof(RoomViewModelProfile).Assembly);
 
 
             var app = builder.Build();

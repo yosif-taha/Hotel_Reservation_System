@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hotel.Services.Abstractions\Hotel.Services.Abstractions.csproj" />
+    <ProjectReference Include="..\Hotel.Services\Hotel.Services.csproj" />
   </ItemGroup>
 
 </Project>

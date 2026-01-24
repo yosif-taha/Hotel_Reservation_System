@@ -1,5 +1,5 @@
 ﻿
-using Hotel.Shared.ViewModels.Response;
+using Hotel.Presentation.ViewModels.Response;
 
 namespace Hotel_Reservation_System.Web.Middlewares
 {

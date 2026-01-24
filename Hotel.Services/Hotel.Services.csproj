@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hotel.Domin\Hotel.Domain.csproj" />
-    <ProjectReference Include="..\Hotel.Services.Abstractions\Hotel.Services.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

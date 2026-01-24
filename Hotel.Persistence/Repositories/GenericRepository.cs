@@ -1,7 +1,6 @@
 ﻿using Hotel.Domain.Contracts;
 using Hotel.Domain.Entities;
 using Hotel.Persistence.Data.Contexts;
-using Hotel.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;

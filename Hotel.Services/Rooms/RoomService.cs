@@ -2,16 +2,16 @@
 using AutoMapper.QueryableExtensions;
 using Hotel.Domain.Contracts;
 using Hotel.Domain.Entities;
-using Hotel.Services.Abstractions;
-using Hotel.Shared.ResultPattern;
-using Hotel.Shared.Dtos.Rooms;
-using Hotel.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using Hotel.Services.Interfaces;
+using Hotel.Services.Dtos.Rooms;
+using Hotel.Services.ResultPattern;
+using Hotel.Services.Helpers;
 
 namespace Hotel.Services.Rooms
 {

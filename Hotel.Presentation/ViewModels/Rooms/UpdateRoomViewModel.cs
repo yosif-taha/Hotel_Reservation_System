@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Hotel.Presentation.ViewModels.Rooms
+{
+    public class UpdateRoomViewModel
+    {
+        public int? RoomNumber { get; set; }
+        public decimal? PricePerNight { get; set; }
+        public bool? IsAvailable { get; set; }
+        public string? Description { get; set; }
+    }
+}
