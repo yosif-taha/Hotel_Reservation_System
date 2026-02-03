@@ -15,7 +15,7 @@ namespace Hotel.Services.Interfaces
         Task<Result> AddRoomAsync(AddRoomDto createRoomDto);
         Task<Result> UpdateRoomAsync(Guid id, UpdateRoomDto updateRoomDto);
         Task<Result> DeleteRoomAsync(Guid id);
-        Task<Result> CheckRoomAvailableAsync(Guid id);
+        Task<Result> CheckRoomAvailableAsync(Guid id, DateTime checkIn, DateTime checkOut);
         Task<Result> SetRoomNotAvailableAsync(Guid id);
     }
 }

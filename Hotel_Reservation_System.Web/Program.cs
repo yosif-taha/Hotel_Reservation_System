@@ -39,6 +39,7 @@ namespace Hotel_Reservation_System.Web
             builder.Services.AddValidatorsFromAssemblyContaining<GetAllRoomsWithPaginationViewModelValidator>();
 
             builder.Services.AddScoped<IRoomService,RoomService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddScoped<IRoomRepository,RoomRepository>();
             builder.Services.AddScoped<IAsyncQueryExecutor,EfAsyncQueryExecutor>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

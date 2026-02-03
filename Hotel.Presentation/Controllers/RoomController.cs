@@ -84,10 +84,10 @@ namespace Hotel.Presentation.Controllers
         }
 
         [HttpGet("CkeckAvailabilityBy{id}")]
-        public async Task<ResponseViewModel> CheckRoomAvailability(Guid id)
+        public async Task<ResponseViewModel> CheckRoomAvailability(Guid id, DateTime checkIn, DateTime checkOut)
         {
             if (id == null) return new FailedResponseViewModel(ErrorType.InvalidRoomId, "Room Id Is Required !!");
-            var result = await _roomService.CheckRoomAvailableAsync(id);
+            var result = await _roomService.CheckRoomAvailableAsync(id,checkIn,checkOut);
            if (!result.IsSuccess && result.Error.Code==ErrorCode.NotFound) return new FailedResponseViewModel(ErrorType.RoomNotFound, $"Room Is Not Found");
            if (!result.IsSuccess && result.Error.Code == ErrorCode.NotAvailable) return new SuccessResponseViewModel("Room Is Not Available");
             return new SuccessResponseViewModel("Room Is Available");
