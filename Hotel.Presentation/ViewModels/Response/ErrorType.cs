@@ -11,7 +11,21 @@
         RoomUpdateFailed = 105,
         UnauthorizedAccess = 106,
         DatabaseConnectionError = 107,
-        InvalidRoomId = 108
+        InvalidRoomId = 108,
+
+
+        //Reservation
+        ReservationNotFound = 201,
+        InvalidReservationData = 202,
+        ReservationAlreadyExists = 203,
+        ReservationCreationFailed = 204,
+        ReservationUpdateFailed = 205,
+        ReservationCancellationFailed = 206,
+        ReservationConflict = 207,
+        InvalidReservationId = 208,
+        ReservationDateInvalid = 209,
+        ReservationExpired = 210
+
 
     }
 }

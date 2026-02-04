@@ -9,6 +9,6 @@ namespace Hotel.Domain.Contracts
     public interface IRoomRepository
     {
         Task<bool> ExistsByNumberAsync(int roomNumber);
-        Task<bool> CheckAvailabilityAsync(Guid id);
+        Task<bool> CheckAvailabilityAsync(Guid id, DateTime checkIn, DateTime checkOut);
     }
 }

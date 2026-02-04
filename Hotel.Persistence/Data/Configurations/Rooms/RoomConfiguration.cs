@@ -17,8 +17,7 @@ namespace Hotel.Persistence.Data.Configurations.Rooms
                   .HasColumnType("decimal(18,2)");
             builder.Property(r => r.Description)
                    .HasMaxLength(1000);
-            builder.Property(r => r.IsAvailable)
-                   .HasDefaultValue(true);
+            //builder.Property(r => r.IsAvailable).HasDefaultValue(true); // ==> Availability Is Determined By ReservationRooms In Different Time
             builder.Property(r => r.IsDeleted)
                    .HasDefaultValue(false);
 

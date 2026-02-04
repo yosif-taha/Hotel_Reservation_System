@@ -8,14 +8,14 @@ namespace Hotel.Domain.Entities
 {
     public class User : BaseEntity
     {
-        public string FullName { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        public string FullName { get; set; }= null!;
+        public string Email { get; set; } = null!;
+        public string PasswordHash { get; set; } = null!;
         public bool IsActive { get; set; } 
         public Guid RoleId { get; set; } //FK
-        public Role Role { get; set; } //Navigtion Property
-        public ICollection<Reservation> Reservations { get; set; } //Navigation Property
-        public ICollection<Feedback> Feedbacks { get; set; } //Navigation Property
+        public Role Role { get; set; } = null!; //Navigtion Property
+        public ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();//Navigation Property
+        public ICollection<Feedback> Feedbacks { get; set; } = new HashSet<Feedback>();//Navigation Property
 
     }
 }

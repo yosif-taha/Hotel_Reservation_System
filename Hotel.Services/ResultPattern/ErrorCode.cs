@@ -11,6 +11,7 @@ namespace Hotel.Services.ResultPattern
        NoError = 0,
        NotFound = 1,
        AlreadyExists = 2,   
-       NotAvailable
+       NotAvailable=3,
+        InvalidData=4
     }
 }
