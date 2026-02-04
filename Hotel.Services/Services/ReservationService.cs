@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Hotel.Domain.Contracts;
 using Hotel.Domain.Entities;
+using Hotel.Domin.Entities.Enums;
 using Hotel.Services.Dtos.Reservation;
 using Hotel.Services.Helpers;
 using Hotel.Services.Interfaces;
@@ -9,11 +10,11 @@ using Hotel.Services.ResultPattern;
 
 namespace Hotel.Services.Rooms
 {
-    public class ReservationService(IGenericRepository<Reservation> _repository, IGenericRepository<Room> _roomRepository,IRoomRepository room, IAsyncQueryExecutor _executor, IMapper _mapper) : IReservationService
+    public class ReservationService(IGenericRepository<Reservation> _reservationRepository, IGenericRepository<ReservationRoom> _roomReservationRepository, IGenericRepository<Room> _roomRepository,IRoomRepository room, IAsyncQueryExecutor _executor, IMapper _mapper) : IReservationService
     {
         public async Task<ResultT<IEnumerable<GetReservationsResponseDto>>> GetAllReservations(GetAllReservationsWithPaginationDto dto)
         { 
-            var query =  _repository.GetAll();
+            var query = _reservationRepository.GetAll();
             var expression = ExpressionBuilder.BuildFilterExpression<Reservation, GetAllReservationsWithPaginationDto>(dto);
             if (expression != null) query = query.Where(expression);     
             var projectedQuery = query.ProjectTo<GetReservationsResponseDto>(_mapper.ConfigurationProvider);
@@ -60,18 +61,28 @@ namespace Hotel.Services.Rooms
 
                 totalPrice += room.PricePerNight * stayDays;
 
+                // change status of reservation ==> Confirmed
+                
                 reservation.ReservationRooms.Add(new ReservationRoom
                 {
                     RoomId = roomId,
                     PricePerNight = room.PricePerNight,
-                    NumberOfNights = stayDays
+                    NumberOfNights = stayDays,
+                    Reservation = new Reservation()
+                    {
+                        Id = reservation.Id,
+                        CheckInDate = checkIn,
+                        CheckOutDate = checkOut,
+                        Status = ReservationStatus.Pending,
+                        UserId = dto.UserId
+                    }
                 });
             }
 
             reservation.TotalPrice = totalPrice;
 
             // Save
-            await _repository.AddAsync(reservation);
+            await _reservationRepository.AddAsync(reservation);
             return Result.Success();
         }
         #endregion
@@ -88,5 +99,41 @@ namespace Hotel.Services.Rooms
             return Result.Success();
         }
         #endregion
+
+        public async Task<ResultT<GetByIdReservationDTO>> GetReservationAsync(Guid Id)
+        {
+            var query = _reservationRepository.GetById(Id);
+            var item = query.ProjectTo<GetByIdReservationDTO>(_mapper.ConfigurationProvider);
+            var result = await _executor.FirstOrDefaultAsync(item);
+            if (result == null) return ResultT<GetByIdReservationDTO>.Failure(new Error(ErrorCode.NotFound, "Reservation is not found !"));
+            return ResultT<GetByIdReservationDTO>.Success(result);
+        }
+
+        public async Task<Result> CancelReservation(Guid Id)
+        {
+            var getReservation = await GetReservationAsync(Id);
+            if (!getReservation.IsSuccess)
+                return Result.Failure(new Error(ErrorCode.NotFound, "Reservation not found !"));
+
+            if (getReservation.Data.Status == ReservationStatus.Cancelled)
+                return Result.Failure(new Error(ErrorCode.AlreadyExists, "Reservation already cancelled."));
+            var map = _mapper.Map<ReservationRoom>(getReservation);
+
+            map.Reservation.Status = ReservationStatus.Cancelled;
+            //var reservation = new ReservationRoom
+            //{
+
+            //    Reservation = new()
+            //    {
+            //        Status = ReservationStatus.Cancelled
+            //    }
+            //    //Id = getReservation.Data.Id,
+            //    //Status = ReservationStatus.Cancelled
+            //};
+            
+            //_roomReservationRepository.Update( ReservationRoom , nameof(map.Reservation.Status));
+            return Result.Success();
+
+        }
     }
 }

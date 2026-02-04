@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hotel.Domain.Entities;
+using Hotel.Services.Dtos.Reservation;
 using Hotel.Services.Dtos.Rooms;
 using System;
 using System.Collections.Generic;

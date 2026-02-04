@@ -14,5 +14,6 @@ namespace Hotel.Services.Dtos.Reservation
         public DateTime CheckOutDate { get; set; }
         public ReservationStatus Status { get; set; }
         public decimal TotalPrice { get; set; }
+
     }
 }

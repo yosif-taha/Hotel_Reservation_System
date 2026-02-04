@@ -12,6 +12,7 @@ using Hotel.Presentation.Validations.Rooms;
 using Hotel.Services.Interfaces;
 using Hotel.Services.Mapper.Rooms;
 using Hotel.Services.Rooms;
+using Hotel.Services.Services;
 using Hotel_Reservation_System.Web.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +41,7 @@ namespace Hotel_Reservation_System.Web
 
             builder.Services.AddScoped<IRoomService,RoomService>();
             builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IRoomRepository,RoomRepository>();
             builder.Services.AddScoped<IAsyncQueryExecutor,EfAsyncQueryExecutor>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

@@ -13,6 +13,5 @@ namespace Hotel.Services.ResultPattern
        AlreadyExists = 2,   
        NotAvailable=3,
         InvalidData=4
-
     }
 }

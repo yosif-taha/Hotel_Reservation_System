@@ -13,7 +13,8 @@ namespace Hotel.Domain.Contracts
     {
         Task<ResultT<IEnumerable<GetReservationsResponseDto>>> GetAllReservations(GetAllReservationsWithPaginationDto dto);
         Task<Result> AddReservationAsync(AddReservationDto createReservationDto);
-
+        Task<ResultT<GetByIdReservationDTO>> GetReservationAsync(Guid Id);
+        Task<Result> CancelReservation(Guid Id);
 
     }
 }
