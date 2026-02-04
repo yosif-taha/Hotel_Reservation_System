@@ -1,8 +1,14 @@
 ﻿using AutoMapper;
 using Hotel.Domain.Contracts;
+using Hotel.Domain.Entities;
+using Hotel.Presentation.Helpers;
+using Hotel.Presentation.Validations.Reservations;
 using Hotel.Presentation.ViewModels.Reservation;
 using Hotel.Presentation.ViewModels.Response;
+using Hotel.Presentation.ViewModels.Rooms;
 using Hotel.Services.Dtos.Reservation;
+using Hotel.Services.Dtos.Rooms;
+using Hotel.Services.ResultPattern;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,6 +22,24 @@ namespace Hotel.Presentation.Controllers
     [Route("api/[controller]")]
     public class ReservationController(IReservationService _reservationService , IMapper _mapper) : ControllerBase
     {
+        [HttpGet]        
+        public async Task<ResponseViewModel> GetAllReservations([FromQuery] GetAllReservationsWithPaginationViewModel model)
+        {
+            var validator = new GetAllRoomsWithPaginationViewModelValidator().Validate(model);
+            if (!validator.IsValid) return new FailedResponseViewModel(ErrorType.InvalidReservationData, "Invalid Reservation Data From Request");
+            var requestDto = _mapper.Map<GetAllReservationsWithPaginationDto>(model);
+            var reservations= await _reservationService.GetAllReservations(requestDto);
+            var items = _mapper.Map<IEnumerable<GetReservationsResponseViewModel>>(reservations.Data);
+            int totalCount = items.Count();
+            var result = new PagedResult<GetReservationsResponseViewModel>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = model.PageNumber,
+                PageSize = model.PageSize,
+            };
+            return new SuccessResponseViewModelT<PagedResult<GetReservationsResponseViewModel>>(result);
+        }
         [HttpGet("Id")]
         public async Task<ResponseViewModel> GetReservation(Guid id)
         {
@@ -24,6 +48,16 @@ namespace Hotel.Presentation.Controllers
             var data = _mapper.Map<GetReservationViewModel>(result.Data);
 
             return new SuccessResponseViewModelT<GetReservationViewModel>(data);
+        }
+        [HttpPost]
+        public async Task<ResponseViewModel> AddReservationAsync(AddReservationViewModel addReservation)
+        { 
+            var validator = new AddReservationViewModelValidator().Validate(addReservation);
+            if (!validator.IsValid) return new FailedResponseViewModel(ErrorType.InvalidReservationData, "Invalid Reservation Data From Request !!");
+            var reservationDto = _mapper.Map<AddReservationDto>(addReservation);
+            var result = await _reservationService.AddReservationAsync(reservationDto);
+            if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.ReservationAlreadyExists, "Reservation Alreagy Exist !!");
+            return new SuccessResponseViewModel();
         }
         [HttpDelete("Delete")]
         public async Task<ResponseViewModel> CancelReservation(Guid id)

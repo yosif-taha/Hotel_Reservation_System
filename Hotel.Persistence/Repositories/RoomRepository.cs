@@ -21,7 +21,7 @@ namespace Hotel.Persistence.Repositories
         public async Task<bool> CheckAvailabilityAsync(Guid id, DateTime checkIn, DateTime checkOut)
         {
             var overlappingReservation = await _context.ReservationRooms.Where(rr => rr.RoomId == id)
-                .Where(rr => rr.Reservation.Status != ReservationStatus.Cancelled)
+                .Where(rr => rr.Reservation.Status != ReservationStatus.Cancelled) // Status check Confirm or Pending Not return
                 .Where(rr =>checkIn < rr.Reservation.CheckOutDate && checkOut > rr.Reservation.CheckInDate).AnyAsync();
 
             return !overlappingReservation;
