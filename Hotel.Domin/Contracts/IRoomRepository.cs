@@ -10,5 +10,9 @@ namespace Hotel.Domain.Contracts
     {
         Task<bool> ExistsByNumberAsync(int roomNumber);
         Task<bool> CheckAvailabilityAsync(Guid id, DateTime checkIn, DateTime checkOut);
+        Task<bool> AreRoomsAvailableAsync(IEnumerable<Guid> roomIds, DateTime checkIn, DateTime checkOut);
+        Task<decimal> CalculateTotalPriceAsync(IEnumerable<Guid> roomIds, int numberOfNights);
+
+
     }
 }

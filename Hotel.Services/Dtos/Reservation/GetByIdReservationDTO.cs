@@ -13,7 +13,6 @@ namespace Hotel.Services.Dtos.Reservation
         public DateTime CheckedInDate { get; set; }
         public DateTime CheckedOutDate { get; set; }
         public ReservationStatus Status { get; set; }
-        public int Capacity { get; set; }
         public Decimal TotalPrice { get; set; }
         public List<Guid> RoomIds { get; set; } = new();
         public Guid UserId { get; set; }

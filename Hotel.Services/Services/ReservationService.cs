@@ -10,7 +10,7 @@ using Hotel.Services.ResultPattern;
 
 namespace Hotel.Services.Rooms
 {
-    public class ReservationService(IGenericRepository<Reservation> _reservationRepository, IGenericRepository<ReservationRoom> _roomReservationRepository, IGenericRepository<Room> _roomRepository,IRoomRepository room, IAsyncQueryExecutor _executor, IMapper _mapper) : IReservationService
+    public class ReservationService(IGenericRepository<Reservation> _reservationRepository,IRoomRepository _roomRepository, IAsyncQueryExecutor _executor, IMapper _mapper) : IReservationService
     {
         #region GRUD Operations
 
@@ -40,29 +40,32 @@ namespace Hotel.Services.Rooms
             var checkOut = checkIn.AddDays(stayDays);
 
             // Check availability
-            foreach (var roomId in dto.RoomIds)
-            {
-                var isAvailable = await room.CheckAvailabilityAsync(roomId, checkIn, checkOut);
-                if (!isAvailable)
-                    return Result.Failure(new Error(ErrorCode.NotAvailable, "One or more rooms are not available"));
-            }
+            var isAvailable = await _roomRepository.AreRoomsAvailableAsync(dto.RoomIds, checkIn, checkOut);
+                return Result.Failure(new Error(ErrorCode.NotAvailable, "One or more rooms are not available"));
+
+            //foreach (var roomId in dto.RoomIds)
+            //{
+            //    var isAvailable = await room.CheckAvailabilityAsync(roomId, checkIn, checkOut);
+            //    if (!isAvailable)
+            //        return Result.Failure(new Error(ErrorCode.NotAvailable, "One or more rooms are not available"));
+            //}
 
             // Create Reservation
-            var reservation = _mapper.Map<Reservation>(dto);
 
             // Create ReservationRooms
-            decimal totalPrice = 0;
+            //decimal totalPrice = 0;
 
-            foreach (var roomId in dto.RoomIds)
-            {
-                var query = _roomRepository.GetById(roomId);
-                var room = query.ProjectTo<Room>(_mapper.ConfigurationProvider).FirstOrDefault();
-                if (room == null) return Result.Failure(new Error(ErrorCode.NotFound, "Room not found"));
+            //foreach (var roomId in dto.RoomIds)
+            //{
+            //    var query = _roomRepository.GetById(roomId);
+            //    var room = query.ProjectTo<Room>(_mapper.ConfigurationProvider).FirstOrDefault();
+            //    if (room == null) return Result.Failure(new Error(ErrorCode.NotFound, "Room not found"));
 
-                totalPrice += room.PricePerNight * stayDays;
-            }
+            //    totalPrice += room.PricePerNight * stayDays;
+            //}
+            var reservation = _mapper.Map<Reservation>(dto);
 
-            reservation.TotalPrice = totalPrice;
+            reservation.TotalPrice = await _roomRepository.CalculateTotalPriceAsync(dto.RoomIds,stayDays);
             reservation.CheckInDate = checkIn;
             reservation.CheckOutDate = checkOut;
             reservation.Status = ReservationStatus.Pending;  // Payment logic Should Make Status Confirmed
@@ -103,7 +106,6 @@ namespace Hotel.Services.Rooms
             return Result.Success();
         }
         #endregion
-
         #region Business Logic
         // Add any additional business logic methods here if needed in the future
         public async Task<Result> UpdateRoomReservation(Guid Id) { 

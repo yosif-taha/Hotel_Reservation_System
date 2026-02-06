@@ -9,9 +9,12 @@ namespace Hotel.Services.Dtos.Reservation
 {
     public class AddReservationDto
     {
+        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public List<Guid> RoomIds { get; set; } = new();
-        public DateTime? CheckInDate { get; set; }   // optional
+        public Decimal TotalPrice { get; set; }
+        public DateTime? CheckedInDate { get; set; }
+        public ReservationStatus Status { get; set; }
         public int? StayDays { get; set; }           // optional
     }
 }

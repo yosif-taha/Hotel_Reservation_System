@@ -59,7 +59,7 @@ namespace Hotel.Presentation.Controllers
             if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.ReservationAlreadyExists, "Reservation Alreagy Exist !!");
             return new SuccessResponseViewModel();
         }
-        [HttpDelete("Delete")]
+        [HttpPut("Cancel")]
         public async Task<ResponseViewModel> CancelReservation(Guid id)
         {
             if (id == Guid.Empty) return new FailedResponseViewModel(ErrorType.InvalidReservationId, "Reservation Id Is Required !!");

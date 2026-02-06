@@ -13,8 +13,18 @@ namespace Hotel.Services.Mapper.Reservations
                 .ForMember(des => des.Status,opt=>opt.MapFrom(src => src.Status))
                 .ForMember(des => des.CheckedInDate,opt => opt.MapFrom(src => src.CheckInDate))
                 .ForMember(des => des.CheckedOutDate,opt => opt.MapFrom(src => src.CheckOutDate))
-                .ForMember(des => des.UserId,opt => opt.MapFrom(src => src.UserId))
-                ;
+                .ForMember(des => des.UserId,opt => opt.MapFrom(src => src.UserId));
+                
+            CreateMap<Reservation,GetReservationsResponseDto>()
+                .ForMember(des => des.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(des => des.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(des => des.CheckedInDate, opt => opt.MapFrom(src => src.CheckInDate))
+                .ForMember(des => des.CheckedOutDate, opt => opt.MapFrom(src => src.CheckOutDate))
+                .ForMember(des => des.UserId, opt => opt.MapFrom(src => src.UserId));
+
+            CreateMap<AddReservationDto, Reservation>()
+                .ForMember(des => des.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(des => des.Status, opt => opt.MapFrom(src => src.Status));
 
         }
     }
