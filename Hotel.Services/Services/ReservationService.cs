@@ -35,12 +35,14 @@ namespace Hotel.Services.Rooms
             if (!validationResult.IsSuccess) return validationResult;
 
             // Determine dates
-            var checkIn = dto.CheckedInDate?.Date ?? DateTime.UtcNow.Date;
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            var checkIn = dto.CheckedInDate ?? today;
             var stayDays = dto.StayDays ?? 3;
             var checkOut = checkIn.AddDays(stayDays);
 
             // Check availability
             var isAvailable = await _roomRepository.AreRoomsAvailableAsync(dto.RoomIds, checkIn, checkOut);
+            if (!isAvailable)
                 return Result.Failure(new Error(ErrorCode.NotAvailable, "One or more rooms are not available"));
 
             /*
@@ -124,8 +126,9 @@ namespace Hotel.Services.Rooms
                 return Result.Failure(new Error(ErrorCode.InvalidData, "Input data is required"));
             if (dto.RoomIds == null || !dto.RoomIds.Any())
                 return Result.Failure(new Error(ErrorCode.InvalidData, "At least one room is required"));
-            if (dto.CheckedInDate.HasValue && dto.CheckedInDate.Value.Date < DateTime.UtcNow.Date)
+            if (dto.CheckedInDate.HasValue && dto.CheckedInDate.Value < DateOnly.FromDateTime(DateTime.UtcNow))
                 return Result.Failure(new Error(ErrorCode.InvalidData, "Check-in date cannot be in the past"));
+
             return Result.Success();
         }
         #endregion

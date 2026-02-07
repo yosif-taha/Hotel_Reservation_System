@@ -4,6 +4,7 @@ using Hotel.Persistence.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260207155457_FixColumns")]
+    partial class FixColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,11 +254,11 @@ namespace Hotel.Persistence.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<DateOnly>("CheckInDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CheckInDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateOnly>("CheckOutDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CheckOutDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -283,7 +286,7 @@ namespace Hotel.Persistence.Migrations
 
                     b.ToTable("Reservations", t =>
                         {
-                            t.HasCheckConstraint("CK_Reservation_CheckInDate", "CAST([CheckInDate] AS DATE) >= CAST(GETDATE() AS DATE)");
+                            t.HasCheckConstraint("CK_Reservation_CheckInDate", "[CheckInDate] >= GETDATE()");
                         });
                 });
 

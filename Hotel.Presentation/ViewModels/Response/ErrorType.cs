@@ -24,7 +24,20 @@
         ReservationConflict = 207,
         InvalidReservationId = 208,
         ReservationDateInvalid = 209,
-        ReservationExpired = 210
+        ReservationExpired = 210,
+
+        //Offer
+        OfferNotFound = 301,
+        InvalidOfferData = 302,
+        OfferAlreadyExists = 203,
+        OfferCreationFailed = 204,
+        OfferUpdateFailed = 205,
+        OfferCancellationFailed = 206,
+        OfferConflict = 207,
+        InvalidOfferId = 208,
+        OfferDateInvalid = 209,
+        OfferExpired = 210,
+        OfferBusinessError = 211
 
 
     }

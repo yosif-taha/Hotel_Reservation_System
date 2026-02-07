@@ -11,8 +11,8 @@ namespace Hotel.Services.Dtos.Reservation
     public class GetReservationsResponseDto
     {
         public Guid Id { get; set; }
-        public DateTime CheckedInDate { get; set; }
-        public DateTime CheckedOutDate { get; set; }
+        public DateOnly CheckedInDate { get; set; }
+        public DateOnly CheckedOutDate { get; set; }
         public ReservationStatus Status { get; set; }
         public Decimal TotalPrice { get; set; }
         public List<Guid> RoomIds { get; set; } = new();

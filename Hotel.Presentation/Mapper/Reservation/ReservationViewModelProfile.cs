@@ -12,13 +12,16 @@ namespace Hotel.Presentation.Mapper.Reservation
 {
     public class ReservationViewModelProfile : Profile
     {
-        private readonly IUserService _userService;
 
-        public ReservationViewModelProfile(IUserService userService)
+        public ReservationViewModelProfile()
         {
-            _userService = userService;
-            CreateMap<GetByIdReservationDTO, GetReservationViewModel>()
-                .ForMember(des => des.UserName, opt => opt.MapFrom(scr => _userService.GetUserNameByUserId(scr.UserId)));
+        
+            CreateMap<GetByIdReservationDTO, GetReservationViewModel>();
+            CreateMap<AddReservationViewModel, AddReservationDto>();
+            //.ForMember(des => des.UserName, opt => opt.MapFrom(scr => _userService.GetUserNameByUserId(scr.UserId)));
+            CreateMap<GetAllReservationsWithPaginationViewModel, GetAllReservationsWithPaginationDto>();
+            CreateMap<GetReservationsResponseDto, GetReservationsResponseViewModel>();
+
         }
     }
 }

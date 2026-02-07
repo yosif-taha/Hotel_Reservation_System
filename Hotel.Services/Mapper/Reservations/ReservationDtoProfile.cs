@@ -26,6 +26,8 @@ namespace Hotel.Services.Mapper.Reservations
                 .ForMember(des => des.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(des => des.Status, opt => opt.MapFrom(src => src.Status));
 
+
+
         }
     }
 }

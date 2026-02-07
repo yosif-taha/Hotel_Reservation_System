@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Services.Services
 {
-    public class OfferService(IGenericRepository<Offer> _offerRepository,IGenericRepository<OfferRoom> _offerRoomRepository,IRoomRepository _roomRepository,IAsyncQueryExecutor _executor,IMapper _mapper) : IOfferService
+    public class OfferService(IGenericRepository<Offer> _offerRepository,IAsyncQueryExecutor _executor,IMapper _mapper) : IOfferService
     {
         public async Task<ResultT<IEnumerable<GetOfferResponseDto>>> GetAllOffers(GetAllOffersWithPaginationDto dto)
         {

@@ -10,7 +10,7 @@ namespace Hotel.Presentation.ViewModels.Reservation
     {
         public Guid UserId { get; set; }
         public List<Guid> RoomIds { get; set; } = new();
-        public DateTime? CheckInDate { get; set; }   // optional
+        public DateOnly? CheckInDate { get; set; }   // optional
         public int? StayDays { get; set; }           // optional
     }
 }

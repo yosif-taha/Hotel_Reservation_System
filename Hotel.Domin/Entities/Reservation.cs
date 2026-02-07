@@ -9,8 +9,8 @@ namespace Hotel.Domain.Entities
 {
     public class Reservation : BaseEntity
     {
-        public DateTime CheckInDate { get; set; }
-        public DateTime CheckOutDate { get; set; }
+        public DateOnly CheckInDate { get; set; }
+        public DateOnly CheckOutDate { get; set; }
         public ReservationStatus Status { get; set; }
         public decimal TotalPrice { get; set; }
         public Guid UserId { get; set; } //FK

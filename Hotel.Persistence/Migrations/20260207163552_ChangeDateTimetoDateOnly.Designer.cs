@@ -4,6 +4,7 @@ using Hotel.Persistence.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260207163552_ChangeDateTimetoDateOnly")]
+    partial class ChangeDateTimetoDateOnly
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -283,7 +286,7 @@ namespace Hotel.Persistence.Migrations
 
                     b.ToTable("Reservations", t =>
                         {
-                            t.HasCheckConstraint("CK_Reservation_CheckInDate", "CAST([CheckInDate] AS DATE) >= CAST(GETDATE() AS DATE)");
+                            t.HasCheckConstraint("CK_Reservation_CheckInDate", "[CheckInDate] >= GETDATE()");
                         });
                 });
 

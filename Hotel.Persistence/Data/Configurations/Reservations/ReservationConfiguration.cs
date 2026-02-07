@@ -17,11 +17,16 @@ namespace Hotel.Persistence.Data.Configurations.Reservations
                .HasDefaultValue(false);
 
             builder.Property(r => r.CheckInDate)
-                      .IsRequired();
-               builder.ToTable(tb =>
-                               tb.HasCheckConstraint("CK_Reservation_CheckInDate", "[CheckInDate] >= GETDATE()")
-                               );
-               builder.Property(r => r.CheckOutDate)
+        .IsRequired();
+
+            builder.ToTable(tb =>
+                tb.HasCheckConstraint(
+                    "CK_Reservation_CheckInDate",
+                    "CAST([CheckInDate] AS DATE) >= CAST(GETDATE() AS DATE)"
+                )
+            );
+
+            builder.Property(r => r.CheckOutDate)
                         .IsRequired();
                builder.Property(r => r.TotalPrice)
                       .HasColumnType("decimal(18,2)");

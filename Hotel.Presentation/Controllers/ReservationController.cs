@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace Hotel.Presentation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class ReservationController(IReservationService _reservationService , IMapper _mapper) : ControllerBase
     {
         [HttpGet]        
