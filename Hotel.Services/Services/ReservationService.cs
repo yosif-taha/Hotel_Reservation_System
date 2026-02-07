@@ -35,7 +35,7 @@ namespace Hotel.Services.Rooms
             if (!validationResult.IsSuccess) return validationResult;
 
             // Determine dates
-            var checkIn = dto.CheckInDate?.Date ?? DateTime.UtcNow.Date;
+            var checkIn = dto.CheckedInDate?.Date ?? DateTime.UtcNow.Date;
             var stayDays = dto.StayDays ?? 3;
             var checkOut = checkIn.AddDays(stayDays);
 
@@ -43,6 +43,7 @@ namespace Hotel.Services.Rooms
             var isAvailable = await _roomRepository.AreRoomsAvailableAsync(dto.RoomIds, checkIn, checkOut);
                 return Result.Failure(new Error(ErrorCode.NotAvailable, "One or more rooms are not available"));
 
+            /*
             //foreach (var roomId in dto.RoomIds)
             //{
             //    var isAvailable = await room.CheckAvailabilityAsync(roomId, checkIn, checkOut);
@@ -50,7 +51,6 @@ namespace Hotel.Services.Rooms
             //        return Result.Failure(new Error(ErrorCode.NotAvailable, "One or more rooms are not available"));
             //}
 
-            // Create Reservation
 
             // Create ReservationRooms
             //decimal totalPrice = 0;
@@ -63,6 +63,9 @@ namespace Hotel.Services.Rooms
 
             //    totalPrice += room.PricePerNight * stayDays;
             //}
+            */
+
+            // Create Reservation
             var reservation = _mapper.Map<Reservation>(dto);
 
             reservation.TotalPrice = await _roomRepository.CalculateTotalPriceAsync(dto.RoomIds,stayDays);
@@ -121,7 +124,7 @@ namespace Hotel.Services.Rooms
                 return Result.Failure(new Error(ErrorCode.InvalidData, "Input data is required"));
             if (dto.RoomIds == null || !dto.RoomIds.Any())
                 return Result.Failure(new Error(ErrorCode.InvalidData, "At least one room is required"));
-            if (dto.CheckInDate.HasValue && dto.CheckInDate.Value.Date < DateTime.UtcNow.Date)
+            if (dto.CheckedInDate.HasValue && dto.CheckedInDate.Value.Date < DateTime.UtcNow.Date)
                 return Result.Failure(new Error(ErrorCode.InvalidData, "Check-in date cannot be in the past"));
             return Result.Success();
         }

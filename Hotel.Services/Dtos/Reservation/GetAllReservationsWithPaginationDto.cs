@@ -10,11 +10,10 @@ namespace Hotel.Services.Dtos.Reservation
     public class GetAllReservationsWithPaginationDto
     {
         //Filter criteria
-        public DateTime CheckInDate { get; set; }
-        public DateTime CheckOutDate { get; set; }
-        public ReservationStatus Status { get; set; }
-        public decimal TotalPrice { get; set; }
-        
+        public DateTime? CheckInFrom { get; set; }
+        public DateTime? CheckOutTo { get; set; }
+        public ReservationStatus? Status { get; set; }
+        public Guid? UserId { get; set; }
         //Pagination properties
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;

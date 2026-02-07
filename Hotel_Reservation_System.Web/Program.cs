@@ -41,6 +41,7 @@ namespace Hotel_Reservation_System.Web
 
             builder.Services.AddScoped<IRoomService,RoomService>();
             builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IOfferService, OfferService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IRoomRepository,RoomRepository>();
             builder.Services.AddScoped<IAsyncQueryExecutor,EfAsyncQueryExecutor>();
