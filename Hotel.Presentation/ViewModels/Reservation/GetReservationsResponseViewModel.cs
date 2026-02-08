@@ -11,7 +11,7 @@ namespace Hotel.Presentation.ViewModels.Reservation
     {
         public DateOnly CheckInDate { get; set; }
         public DateOnly CheckOutDate { get; set; }
-        public ReservationStatus Status { get; set; }
+        public string Status { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }

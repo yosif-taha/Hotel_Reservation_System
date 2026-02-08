@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260207155457_FixColumns")]
-    partial class FixColumns
+    [Migration("20260208133930_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -255,10 +255,10 @@ namespace Hotel.Persistence.Migrations
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTime>("CheckInDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("CheckOutDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("CheckOutDate")
+                        .HasColumnType("date");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -284,10 +284,7 @@ namespace Hotel.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reservations", t =>
-                        {
-                            t.HasCheckConstraint("CK_Reservation_CheckInDate", "[CheckInDate] >= GETDATE()");
-                        });
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("Hotel.Domain.Entities.ReservationRoom", b =>

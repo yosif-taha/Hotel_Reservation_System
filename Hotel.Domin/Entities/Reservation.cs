@@ -17,7 +17,7 @@ namespace Hotel.Domain.Entities
         public User User { get; set; } = null!; //Navigation Property
         public Payment Payment { get; set; } = null!;//Navigation Property //One to One
         public Invoice Invoice { get; set; } = null!;//Navigation Property //One to One
-        public ICollection<ReservationRoom> ReservationRooms { get; set; } = new HashSet<ReservationRoom>(); //Navigation Property
+        public ICollection<ReservationRoom> ReservationRooms { get; set; } = new List<ReservationRoom>(); //Navigation Property
 
 
 

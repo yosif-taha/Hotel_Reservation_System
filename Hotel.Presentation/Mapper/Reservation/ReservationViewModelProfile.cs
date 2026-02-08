@@ -16,11 +16,14 @@ namespace Hotel.Presentation.Mapper.Reservation
         public ReservationViewModelProfile()
         {
         
-            CreateMap<GetByIdReservationDTO, GetReservationViewModel>();
+            CreateMap<GetByIdReservationDTO, GetReservationViewModel>()
+                .ForMember(des => des.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
             CreateMap<AddReservationViewModel, AddReservationDto>();
             //.ForMember(des => des.UserName, opt => opt.MapFrom(scr => _userService.GetUserNameByUserId(scr.UserId)));
             CreateMap<GetAllReservationsWithPaginationViewModel, GetAllReservationsWithPaginationDto>();
-            CreateMap<GetReservationsResponseDto, GetReservationsResponseViewModel>();
+            CreateMap<GetReservationsResponseDto, GetReservationsResponseViewModel>()
+                .ForMember(des => des.Status,opt => opt.MapFrom(src =>src.Status.ToString()));
 
         }
     }

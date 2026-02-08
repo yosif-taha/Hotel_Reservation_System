@@ -251,7 +251,7 @@ namespace Hotel.Persistence.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<DateOnly>("CheckInDate")
+                    b.Property<DateTime>("CheckInDate")
                         .HasColumnType("date");
 
                     b.Property<DateOnly>("CheckOutDate")
@@ -281,10 +281,7 @@ namespace Hotel.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reservations", t =>
-                        {
-                            t.HasCheckConstraint("CK_Reservation_CheckInDate", "CAST([CheckInDate] AS DATE) >= CAST(GETDATE() AS DATE)");
-                        });
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("Hotel.Domain.Entities.ReservationRoom", b =>

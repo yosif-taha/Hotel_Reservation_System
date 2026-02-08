@@ -13,12 +13,10 @@ namespace Hotel.Presentation.Validations.Reservations
         public GetAllRoomsWithPaginationViewModelValidator()
         {
             RuleFor(x => x.CheckInDate)
-      .NotEmpty().WithMessage("Check-in date is required.");
+     .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
+     .When(x => x.CheckInDate.HasValue)
+     .WithMessage("Check-in date must be today or later.");
 
-            RuleFor(x => x.CheckInDate)
-                .Must(date => date!.Value >= DateOnly.FromDateTime(DateTime.UtcNow))
-                .When(x => x.CheckInDate.HasValue)
-                .WithMessage("Check-in date must be today or later.");
 
             //RuleFor(x => x.TotalPrice)
             //    .GreaterThanOrEqualTo(0)
