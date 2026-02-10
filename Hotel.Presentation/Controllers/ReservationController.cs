@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace Hotel.Presentation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class ReservationController(IReservationService _reservationService , IMapper _mapper) : ControllerBase
     {
         [HttpGet]        
@@ -65,7 +65,7 @@ namespace Hotel.Presentation.Controllers
             if (id == Guid.Empty) return new FailedResponseViewModel(ErrorType.InvalidReservationId, "Reservation Id Is Required !!");
 
             var result = await _reservationService.CancelReservation(id);
-            if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.InvalidReservationData, "Reservation Already Not Found!!");
+            if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.InvalidReservationData, "Reservation Already Cancelled!!");
 
             return new SuccessResponseViewModel("Canceled Successfully");
             

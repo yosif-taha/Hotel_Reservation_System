@@ -13,7 +13,7 @@ namespace Hotel.Services.Rooms
     public class ReservationService(IGenericRepository<Reservation> _reservationRepository,IRoomRepository _roomRepository, IAsyncQueryExecutor _executor, IMapper _mapper) : IReservationService
     {
         #region GRUD Operations
-
+        // Validate userId ==>
         public async Task<ResultT<IEnumerable<GetReservationsResponseDto>>> GetAllReservations(GetAllReservationsWithPaginationDto dto)
         { 
             var query = _reservationRepository.GetAll();
@@ -35,35 +35,15 @@ namespace Hotel.Services.Rooms
             if (!validationResult.IsSuccess) return validationResult;
 
             // Determine dates
-            var checkIn = dto.CheckedInDate?.Date ?? DateTime.UtcNow.Date;
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            var checkIn = dto.CheckInDate ?? today;
             var stayDays = dto.StayDays ?? 3;
             var checkOut = checkIn.AddDays(stayDays);
 
             // Check availability
             var isAvailable = await _roomRepository.AreRoomsAvailableAsync(dto.RoomIds, checkIn, checkOut);
+            if (!isAvailable)
                 return Result.Failure(new Error(ErrorCode.NotAvailable, "One or more rooms are not available"));
-
-            /*
-            //foreach (var roomId in dto.RoomIds)
-            //{
-            //    var isAvailable = await room.CheckAvailabilityAsync(roomId, checkIn, checkOut);
-            //    if (!isAvailable)
-            //        return Result.Failure(new Error(ErrorCode.NotAvailable, "One or more rooms are not available"));
-            //}
-
-
-            // Create ReservationRooms
-            //decimal totalPrice = 0;
-
-            //foreach (var roomId in dto.RoomIds)
-            //{
-            //    var query = _roomRepository.GetById(roomId);
-            //    var room = query.ProjectTo<Room>(_mapper.ConfigurationProvider).FirstOrDefault();
-            //    if (room == null) return Result.Failure(new Error(ErrorCode.NotFound, "Room not found"));
-
-            //    totalPrice += room.PricePerNight * stayDays;
-            //}
-            */
 
             // Create Reservation
             var reservation = _mapper.Map<Reservation>(dto);
@@ -124,7 +104,7 @@ namespace Hotel.Services.Rooms
                 return Result.Failure(new Error(ErrorCode.InvalidData, "Input data is required"));
             if (dto.RoomIds == null || !dto.RoomIds.Any())
                 return Result.Failure(new Error(ErrorCode.InvalidData, "At least one room is required"));
-            if (dto.CheckedInDate.HasValue && dto.CheckedInDate.Value.Date < DateTime.UtcNow.Date)
+            if (dto.CheckInDate.HasValue && dto.CheckInDate.Value < DateOnly.FromDateTime(DateTime.UtcNow))
                 return Result.Failure(new Error(ErrorCode.InvalidData, "Check-in date cannot be in the past"));
             return Result.Success();
         }

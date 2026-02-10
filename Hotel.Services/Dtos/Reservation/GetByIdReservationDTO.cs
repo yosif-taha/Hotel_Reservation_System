@@ -10,11 +10,11 @@ namespace Hotel.Services.Dtos.Reservation
     public class GetByIdReservationDTO
     {
         public Guid Id { get; set; }
-        public DateTime CheckedInDate { get; set; }
-        public DateTime CheckedOutDate { get; set; }
+        public DateOnly CheckInDate { get; set; }
+        public DateOnly CheckOutDate { get; set; }
         public ReservationStatus Status { get; set; }
         public Decimal TotalPrice { get; set; }
-        public List<Guid> RoomIds { get; set; } = new();
+        //public List<Guid> RoomIds { get; set; } = new();
         public Guid UserId { get; set; }
     }
 }

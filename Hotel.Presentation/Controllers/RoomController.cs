@@ -84,7 +84,7 @@ namespace Hotel.Presentation.Controllers
         }
 
         [HttpGet("CkeckAvailabilityBy{id}")]
-        public async Task<ResponseViewModel> CheckRoomAvailability(Guid id, DateTime checkIn, DateTime checkOut)
+        public async Task<ResponseViewModel> CheckRoomAvailability(Guid id, DateOnly checkIn, DateOnly checkOut)
         {
             if (id == null) return new FailedResponseViewModel(ErrorType.InvalidRoomId, "Room Id Is Required !!");
             var result = await _roomService.CheckRoomAvailableAsync(id,checkIn,checkOut);
