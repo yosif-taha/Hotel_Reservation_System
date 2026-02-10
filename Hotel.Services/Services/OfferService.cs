@@ -18,7 +18,19 @@ namespace Hotel.Services.Services
     {
         public async Task<ResultT<IEnumerable<GetOfferResponseDto>>> GetAllOffers(GetAllOffersWithPaginationDto dto)
         {
-            throw new NotImplementedException();
+            var query = _offerRepository.GetAll();
+
+            var expression = ExpressionBuilder.BuildFilterExpression<Offer, GetAllOffersWithPaginationDto>(dto);
+            if (expression != null)
+                query = query.Where(expression);
+
+            var projected = query.ProjectTo<GetOfferResponseDto>(_mapper.ConfigurationProvider)
+                .Skip((dto.PageNumber - 1) * dto.PageSize)
+                .Take(dto.PageSize);
+
+            var data = await _executor.ToListAsync(projected);
+            return ResultT<IEnumerable<GetOfferResponseDto>>.Success(data);
+            
         }
 
         public async Task<ResultT<GetOfferResponseDto>> GetOfferByIdAsync(Guid id)

@@ -29,15 +29,15 @@
         //Offer
         OfferNotFound = 301,
         InvalidOfferData = 302,
-        OfferAlreadyExists = 203,
-        OfferCreationFailed = 204,
-        OfferUpdateFailed = 205,
-        OfferCancellationFailed = 206,
-        OfferConflict = 207,
-        InvalidOfferId = 208,
-        OfferDateInvalid = 209,
-        OfferExpired = 210,
-        OfferBusinessError = 211
+        OfferAlreadyExists = 303,
+        OfferCreationFailed = 304,
+        OfferUpdateFailed = 305,
+        OfferCancellationFailed = 306,
+        OfferConflict = 307,
+        InvalidOfferId = 308,
+        OfferDateInvalid = 309,
+        OfferExpired = 310,
+        OfferBusinessError = 311
 
 
     }

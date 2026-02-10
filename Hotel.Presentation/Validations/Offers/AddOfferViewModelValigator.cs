@@ -1,10 +1,6 @@
 ﻿using FluentValidation;
-using Hotel.Presentation.ViewModels.Offer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Hotel.Presentation.ViewModels.Offers;
+
 
 namespace Hotel.Presentation.Validations.Offers
 {

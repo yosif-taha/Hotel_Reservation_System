@@ -2,14 +2,14 @@
 using Hotel.Presentation.Validations.Offers;
 using Hotel.Presentation.ViewModels.Offers;
 using Hotel.Presentation.ViewModels.Response;
-using Hotel.Services.Dtos.Offer;
+using Hotel.Services.Dtos.Offers;
+using Hotel.Services.ResultPattern;
+using Hotel.Services.Services;
 using Hotel.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Hotel.Services.Dtos.Offer;
+using Hotel.Presentation.Helpers;
+
 
 namespace Hotel.Presentation.Controllers
 {
@@ -18,12 +18,41 @@ namespace Hotel.Presentation.Controllers
     public class OfferController(IOfferService _offerService, IMapper _mapper) : ControllerBase
     {
         [HttpGet]
+        public async Task<ResponseViewModel> GetAllOffers(GetAllOffersWithPaginationViewModel model)
+        {
+            var validator = new GetAllOffersWithPaginationViewModelValidator().Validate(model);
+            if (!validator.IsValid) return new FailedResponseViewModel(ErrorType.InvalidOfferData, "Invalid Offer Data From Request");
+            var requestDto = _mapper.Map<Services.Dtos.Offers.GetAllOffersWithPaginationDto>(model);
+            var offers = await _offerService.GetAllOffers(requestDto);
+            var items = _mapper.Map<IEnumerable<GetOfferResponseViewModel>>(offers.Data);
+            int totalCount = items.Count();
+            var result = new PagedResult<GetOfferResponseViewModel>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = model.PageNumber,
+                PageSize = model.PageSize,
+            };
+            return new SuccessResponseViewModelT<PagedResult<GetOfferResponseViewModel>>(result);
+
+        }
+        [HttpGet]
         public async Task<ResponseViewModel> GetOfferById(Guid id)
         {
             var result = await _offerService.GetOfferByIdAsync(id);
             if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.InvalidOfferData, "Offer not found !");
             var data = _mapper.Map<GetOfferResponseViewModel>(result.Data);
             return new SuccessResponseViewModelT<GetOfferResponseViewModel>(data);
+        }
+        [HttpPost]
+        public async Task<ResponseViewModel> AddOffer(AddOfferViewModel addOffer)
+        {
+            var validator = new AddOfferViewModelValidator().Validate(addOffer);
+            if (!validator.IsValid) return new FailedResponseViewModel(ErrorType.InvalidOfferData, "Invalid Offer Data From Request !!");
+            var offerDto = _mapper.Map<Services.Dtos.Offers.AddOfferDto>(addOffer);
+            var result = await _offerService.AddOfferAsync(offerDto);
+            if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.InvalidOfferData, "Failed to add offer !!");
+            return new SuccessResponseViewModel();
         }
         [HttpPut]
         public async Task<ResponseViewModel> UpdateOffer(Guid id, UpdateOfferViewModel updateOffer)
@@ -41,5 +70,5 @@ namespace Hotel.Presentation.Controllers
             var result = await _offerService.DeleteOfferAsync(id);
             if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.OfferNotFound, "Offer not found !!");
             return new SuccessResponseViewModel();
-        }
+    }
 }
