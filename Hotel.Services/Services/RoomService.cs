@@ -87,7 +87,7 @@ namespace Hotel.Services.Rooms
             return Result.Success();
         }
             
-        public async Task<Result> CheckRoomAvailableAsync(Guid id, DateTime checkIn, DateTime checkOut)
+        public async Task<Result> CheckRoomAvailableAsync(Guid id, DateOnly checkIn, DateOnly checkOut)
         {
             var data = await GetRoomByIdAsync(id);
             if (!data.IsSuccess) return ResultT<GetRoomResponseDto>.Failure(new Error(ErrorCode.NotFound, "Room IS Not Found !!"));
