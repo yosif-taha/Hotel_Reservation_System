@@ -9,11 +9,13 @@ namespace Hotel.Services.Mapper.Reservations
         public ReservationDtoProfile()
         {
             CreateMap<Reservation, GetByIdReservationDTO>()
-                .ForMember(des => des.Id ,opt => opt.MapFrom(src => src.Id))
-                .ForMember(des => des.Status,opt=>opt.MapFrom(src => src.Status))
-                .ForMember(des => des.CheckInDate,opt => opt.MapFrom(src => src.CheckInDate))
-                .ForMember(des => des.CheckOutDate,opt => opt.MapFrom(src => src.CheckOutDate))
-                .ForMember(des => des.UserId,opt => opt.MapFrom(src => src.UserId));
+                .ForMember(des => des.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(des => des.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(des => des.CheckInDate, opt => opt.MapFrom(src => src.CheckInDate))
+                .ForMember(des => des.CheckOutDate, opt => opt.MapFrom(src => src.CheckOutDate))
+                .ForMember(des => des.UserId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(des => des.RoomIds, opt => opt.MapFrom(scr => scr.ReservationRooms.Select(r => r.RoomId)));
+         
 
             CreateMap<Reservation, GetReservationsResponseDto>()
       .ForMember(dest => dest.CheckInDate, opt => opt.MapFrom(src => src.CheckInDate))

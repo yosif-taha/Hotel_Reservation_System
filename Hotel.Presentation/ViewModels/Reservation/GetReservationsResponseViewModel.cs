@@ -13,5 +13,6 @@ namespace Hotel.Presentation.ViewModels.Reservation
         public DateOnly CheckOutDate { get; set; }
         public string Status { get; set; }
         public decimal TotalPrice { get; set; }
+
     }
 }

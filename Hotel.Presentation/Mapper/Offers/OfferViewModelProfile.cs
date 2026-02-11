@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Hotel.Presentation.ViewModels.Offer;
-using Hotel.Services.Dtos.Offers;
+using Hotel.Presentation.ViewModels.Offers;
+using Hotel.Services.Dtos.Offer;
 using System;
 using System.Collections.Generic;
 using System.Linq;

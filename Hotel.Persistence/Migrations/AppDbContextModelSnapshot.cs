@@ -254,7 +254,7 @@ namespace Hotel.Persistence.Migrations
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("date");
 
-                    b.Property<DateOnly>("CheckOutDate")
+                    b.Property<DateTime>("CheckOutDate")
                         .HasColumnType("date");
 
                     b.Property<DateTime?>("CreatedAt")

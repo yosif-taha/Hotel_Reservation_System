@@ -16,6 +16,7 @@ namespace Hotel.Services.Interfaces
         Task<Result> AddOfferAsync(AddOfferDto createOfferDto);
         Task<Result> UpdateOfferAsync(Guid id, UpdateOfferDto updateOfferDto);
         Task<Result> DeleteOfferAsync(Guid id);
+        Task<ResultT<GetOfferResponseDto>> AssignOfferToRoom(Guid offerId, Guid roomId);
         //Task<Result> ApplyBestOfferAsync(Guid roomId, decimal basePrice, DateTime checkIn);
 
     }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260208133930_init")]
+    [Migration("20260211003830_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -257,7 +257,7 @@ namespace Hotel.Persistence.Migrations
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("date");
 
-                    b.Property<DateOnly>("CheckOutDate")
+                    b.Property<DateTime>("CheckOutDate")
                         .HasColumnType("date");
 
                     b.Property<DateTime?>("CreatedAt")

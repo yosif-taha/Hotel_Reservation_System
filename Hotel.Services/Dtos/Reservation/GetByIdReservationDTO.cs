@@ -14,7 +14,7 @@ namespace Hotel.Services.Dtos.Reservation
         public DateOnly CheckOutDate { get; set; }
         public ReservationStatus Status { get; set; }
         public Decimal TotalPrice { get; set; }
-        //public List<Guid> RoomIds { get; set; } = new();
+        public List<Guid> RoomIds { get; set; } = new();
         public Guid UserId { get; set; }
     }
 }

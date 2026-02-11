@@ -14,23 +14,23 @@ using System.Threading.Tasks;
 
 namespace Hotel.Services.Services
 {
-    public class OfferService(IGenericRepository<Offer> _offerRepository,IRoomRepository _roomRepository,IAsyncQueryExecutor _executor,IMapper _mapper) : IOfferService
+    public class OfferService(IGenericRepository<Offer> _offerRepository,IGenericRepository<Room> _roomRepository,IAsyncQueryExecutor _executor,IMapper _mapper) : IOfferService
     {
         public async Task<ResultT<IEnumerable<GetOfferResponseDto>>> GetAllOffers(GetAllOffersWithPaginationDto dto)
         {
             var query = _offerRepository.GetAll();
 
             var expression = ExpressionBuilder.BuildFilterExpression<Offer, GetAllOffersWithPaginationDto>(dto);
-            if (expression != null)
+            if (expression is not null)
                 query = query.Where(expression);
 
-            var projected = query.ProjectTo<GetOfferResponseDto>(_mapper.ConfigurationProvider)
-                .Skip((dto.PageNumber - 1) * dto.PageSize)
-                .Take(dto.PageSize);
+            var data = query.ProjectTo<GetOfferResponseDto>(_mapper.ConfigurationProvider);
 
-            var data = await _executor.ToListAsync(projected);
-            return ResultT<IEnumerable<GetOfferResponseDto>>.Success(data);
-            
+            var items = data.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
+
+            var result = await _executor.ToListAsync(items);
+            return ResultT<IEnumerable<GetOfferResponseDto>>.Success(result);
+
         }
 
         public async Task<ResultT<GetOfferResponseDto>> GetOfferByIdAsync(Guid id)
@@ -47,7 +47,11 @@ namespace Hotel.Services.Services
 
         public async Task<Result> AddOfferAsync(AddOfferDto dto)
         {
-            throw new NotImplementedException();
+            var IsExist = await GetOfferByIdAsync(dto.Id);
+            if (IsExist.IsSuccess) return Result.Failure(new Error(ErrorCode.AlreadyExists, "Offer already exist !!"));
+            var Data = _mapper.Map<Offer>(dto);
+            var result =  _offerRepository.AddAsync(Data);
+            return Result.Success();
         }
 
         public async Task<Result> UpdateOfferAsync(Guid id, UpdateOfferDto dto)
@@ -87,5 +91,30 @@ namespace Hotel.Services.Services
             _offerRepository.SoftDelete(id);
             return Result.Success();
         }
+
+        public async Task<ResultT<GetOfferResponseDto>> AssignOfferToRoom(Guid offerId, Guid roomId)
+        {
+         
+            var roomQuery = _roomRepository.GetById(roomId);
+            var roomEntity = await _executor.FirstOrDefaultAsync(roomQuery);
+            if (roomEntity == null)
+                return ResultT<GetOfferResponseDto>.Failure(new Error(ErrorCode.NotFound, "Room not found !!"));
+
+        
+            var offerResult = await GetOfferByIdAsync(offerId);
+            if (!offerResult.IsSuccess)
+                return ResultT<GetOfferResponseDto>.Failure(new Error(ErrorCode.NotFound, "Offer not found !!"));
+            var offer = offerResult.Data;
+
+
+            if(!roomEntity.OfferRooms.Any(o=>o.OfferId == offerId))
+            {
+                roomEntity.OfferRooms.Add(new OfferRoom { OfferId = offerId, RoomId = roomId });
+            }
+            _roomRepository.Update(roomEntity);
+
+            return ResultT<GetOfferResponseDto>.Success(offer);
+        }
+
     }
 }
