@@ -77,7 +77,7 @@ namespace Hotel.Presentation.Controllers
             var result = await _offerService.AssignOfferToRoom(offerId, roomId);
 
             if (!result.IsSuccess)
-                return new FailedResponseViewModel(ErrorType.InvalidOfferData, result.Error.Message);
+                return new FailedResponseViewModel(ErrorType.InvalidOfferData, "InvalidData");
 
             var data = _mapper.Map<GetOfferResponseViewModel>(result.Data);
 
