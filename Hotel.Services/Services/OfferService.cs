@@ -47,8 +47,8 @@ namespace Hotel.Services.Services
 
         public async Task<Result> AddOfferAsync(AddOfferDto dto)
         {
-            var IsExist = await GetOfferByIdAsync(dto.Id);
-            if (IsExist.IsSuccess) return Result.Failure(new Error(ErrorCode.AlreadyExists, "Offer already exist !!"));
+            if (dto is null)
+                return Result.Failure(new Error(ErrorCode.InvalidData, "Model is null"));
             var Data = _mapper.Map<Offer>(dto);
             var result =  _offerRepository.AddAsync(Data);
             return Result.Success();
@@ -111,6 +111,7 @@ namespace Hotel.Services.Services
             {
                 roomEntity.OfferRooms.Add(new OfferRoom { OfferId = offerId, RoomId = roomId });
             }
+            
             _roomRepository.Update(roomEntity);
 
             return ResultT<GetOfferResponseDto>.Success(offer);

@@ -14,6 +14,6 @@ namespace Hotel.Services.Dtos.Offer
         public DateTime EndDate { get; set; }
         public decimal DiscountPercentage { get; set; }
         public bool IsActive { get; set; }
-        public IEnumerable<Guid> RoomIds { get; set; } = new List<Guid>();
+        public List<Guid> RoomsId { get; set; } = new List<Guid>();
     }
 }

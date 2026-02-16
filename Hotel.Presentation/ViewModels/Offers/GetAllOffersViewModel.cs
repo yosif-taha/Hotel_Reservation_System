@@ -13,5 +13,6 @@ namespace Hotel.Presentation.ViewModels.Offers
         public DateTime EndDate { get; set; }
         public decimal DiscountPercentage { get; set; }
         public bool IsActive { get; set; }
+        public List<Guid> RoomsId { get; set; } = new();
     }
 }

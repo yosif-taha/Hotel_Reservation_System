@@ -15,6 +15,10 @@ namespace Hotel.Presentation.Mapper.Offers
         {
             CreateMap<AddOfferViewModel, AddOfferDto>();
             CreateMap<GetAllOffersWithPaginationDto, GetAllOffersWithPaginationViewModel>();
+            CreateMap<GetAllOffersWithPaginationViewModel, GetAllOffersWithPaginationDto>();
+            CreateMap<GetOfferResponseDto, GetAllOffersViewModel>();
+            CreateMap<GetOfferResponseDto, GetOfferResponseViewModel>();
+            CreateMap<UpdateOfferViewModel, UpdateOfferDto>();
         }
     }
 }
