@@ -84,23 +84,23 @@ namespace Hotel.Presentation.Controllers
         }
 
         [HttpGet("CkeckAvailabilityBy{id}")]
-        public async Task<ResponseViewModel> CheckRoomAvailability(Guid id, DateOnly checkIn, DateOnly checkOut)
+        public async Task<ResponseViewModel> CheckRoomAvailability(Guid id, DateOnly? checkIn, DateOnly? checkOut,int? stayDays)
         {
             if (id == null) return new FailedResponseViewModel(ErrorType.InvalidRoomId, "Room Id Is Required !!");
-            var result = await _roomService.CheckRoomAvailableAsync(id,checkIn,checkOut);
+            var result = await _roomService.CheckRoomAvailableAsync(id,checkIn,checkOut, stayDays);
            if (!result.IsSuccess && result.Error.Code==ErrorCode.NotFound) return new FailedResponseViewModel(ErrorType.RoomNotFound, $"Room Is Not Found");
            if (!result.IsSuccess && result.Error.Code == ErrorCode.NotAvailable) return new SuccessResponseViewModel("Room Is Not Available");
             return new SuccessResponseViewModel("Room Is Available");
         }
 
-        [HttpPut("SetNotAvailable")]
-        public async Task<ResponseViewModel> SetRoomNotAvailable([FromQuery]Guid id)
-        {
-            if (id == null) return new FailedResponseViewModel(ErrorType.InvalidRoomId, "Room Id Is Required !!");
-            var result =  await _roomService.SetRoomNotAvailableAsync(id);
-            if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.RoomNotFound, $"Room Is Not Found");
-            return new SuccessResponseViewModel($"Room marked as unavailable");
-        }
+        //[HttpPut("SetNotAvailable")]
+        //public async Task<ResponseViewModel> SetRoomNotAvailable([FromQuery]Guid id)
+        //{
+        //    if (id == null) return new FailedResponseViewModel(ErrorType.InvalidRoomId, "Room Id Is Required !!");
+        //    var result =  await _roomService.SetRoomNotAvailableAsync(id);
+        //    if (!result.IsSuccess) return new FailedResponseViewModel(ErrorType.RoomNotFound, $"Room Is Not Found");
+        //    return new SuccessResponseViewModel($"Room marked as unavailable");
+        //}
 
 
     }

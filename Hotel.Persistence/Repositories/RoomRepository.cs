@@ -58,9 +58,43 @@ namespace Hotel.Persistence.Repositories
                 .AnyAsync();
         }
 
+        //public async Task<decimal> CalculateTotalPriceAsync(IEnumerable<Guid> roomIds, int numberOfNights)
+        //{
+        //    return await _context.Rooms.Where(r => roomIds.Contains(r.Id)).SumAsync(r => r.PricePerNight * numberOfNights);
+        //}
+
         public async Task<decimal> CalculateTotalPriceAsync(IEnumerable<Guid> roomIds, int numberOfNights)
         {
-            return await _context.Rooms.Where(r => roomIds.Contains(r.Id)).SumAsync(r => r.PricePerNight * numberOfNights);
+            var today = DateTime.UtcNow;
+
+            var rooms = await _context.Rooms
+                .Where(r => roomIds.Contains(r.Id))
+                .Select(r => new
+                {
+                    r.PricePerNight,
+
+                    // Get the active offer for today if exists
+                    Discount = r.OfferRooms
+                        .Where(or => or.Offer.IsActive &&or.Offer.StartDate <= today &&or.Offer.EndDate >= today)
+                        .Select(or => or.Offer.DiscountPercentage)
+                        .OrderByDescending(d => d)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+
+            decimal total = 0;
+
+            foreach (var room in rooms)
+            {
+                var finalPrice = room.PricePerNight;
+
+                if (room.Discount > 0)
+                    finalPrice -= finalPrice * (room.Discount / 100);
+
+                total += finalPrice * numberOfNights;
+            }
+
+            return total;
         }
 
     }

@@ -87,20 +87,30 @@ namespace Hotel.Services.Rooms
             return Result.Success();
         }
             
-        public async Task<Result> CheckRoomAvailableAsync(Guid id, DateOnly checkIn, DateOnly checkOut)
+        public async Task<Result> CheckRoomAvailableAsync(Guid id, DateOnly? CheckInDate, DateOnly? CheckoutDate,int? stayDays)
         {
             var data = await GetRoomByIdAsync(id);
             if (!data.IsSuccess) return ResultT<GetRoomResponseDto>.Failure(new Error(ErrorCode.NotFound, "Room IS Not Found !!"));
+
+            // If check-in date is not provided, use today's date as the default check-in date.
+            // If stay days is not provided, use 3 days as the default stay duration.
+            // If check-out date is not provided, calculate it based on the check-in date and stay duration.
+            // Determine dates
+
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            var checkIn =CheckInDate ?? today;
+            var stayDaynum = stayDays ?? 3;
+            var checkOut = CheckoutDate ??checkIn.AddDays(stayDaynum);
+
             var flag = await _roomRepository.CheckAvailabilityAsync(id,checkIn, checkOut);
-           if (!flag) return Result.Failure(new Error(ErrorCode.NotAvailable, $"Room Is Not Available"));
+            if (!flag) return Result.Failure(new Error(ErrorCode.NotAvailable, $"Room Is Not Available"));
             return Result.Success();
         }
 
-        public async Task<Result> SetRoomNotAvailableAsync(Guid id)
-        { 
-           var dto = new UpdateRoomDto() {IsAvailable = false };
-           return await UpdateRoomAsync(id,dto);
-
-        }
+        //public async Task<Result> SetRoomNotAvailableAsync(Guid id)
+        //{ 
+        //   var dto = new UpdateRoomDto() {IsAvailable = false };
+        //   return await UpdateRoomAsync(id,dto);
+        //}
     }
 }
