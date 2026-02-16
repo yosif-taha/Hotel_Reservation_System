@@ -7,6 +7,7 @@ using Hotel.Services.Dtos.Reservation;
 using Hotel.Services.Helpers;
 using Hotel.Services.Interfaces;
 using Hotel.Services.ResultPattern;
+using System.Data;
 
 namespace Hotel.Services.Rooms
 {
@@ -37,8 +38,8 @@ namespace Hotel.Services.Rooms
             // Determine dates
             var today = DateOnly.FromDateTime(DateTime.Now);
             var checkIn = dto.CheckInDate ?? today;
-            var stayDays = dto.StayDays ?? 3;
-            var checkOut = checkIn.AddDays(stayDays);
+            //var stayDays = dto.StayDays ?? 3;
+            var checkOut = checkIn.AddDays(dto.StayDays);
 
             // Check availability
             var isAvailable = await _roomRepository.AreRoomsAvailableAsync(dto.RoomIds, checkIn, checkOut);
@@ -48,7 +49,7 @@ namespace Hotel.Services.Rooms
             // Create Reservation
             var reservation = _mapper.Map<Reservation>(dto);
 
-            reservation.TotalPrice = await _roomRepository.CalculateTotalPriceAsync(dto.RoomIds,stayDays);
+            reservation.TotalPrice = await _roomRepository.CalculateTotalPriceAsync(dto.RoomIds, dto.StayDays);
             reservation.CheckInDate = checkIn;
             reservation.CheckOutDate = checkOut;
             reservation.Status = ReservationStatus.Pending;  // Payment logic Should Make Status Confirmed
