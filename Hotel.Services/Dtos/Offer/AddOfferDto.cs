@@ -8,7 +8,6 @@ namespace Hotel.Services.Dtos.Offer
 {
     public class AddOfferDto
     {
-        public Guid Id { get; set; }
         public string Title { get; set; } = null!;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

@@ -13,7 +13,7 @@ namespace Hotel.Domain.Entities
         public DateTime EndDate { get; set; }
         public decimal DiscountPercentage { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<OfferRoom> OfferRooms { get; set; } //Navigation Property
+        public List<OfferRoom> OfferRooms { get; set; } //Navigation Property
 
     }
 }

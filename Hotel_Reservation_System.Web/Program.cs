@@ -11,6 +11,7 @@ using Hotel.Presentation.Controllers;
 using Hotel.Presentation.Mapper.Rooms;
 using Hotel.Presentation.Validations.Rooms;
 using Hotel.Services.Interfaces;
+using Hotel.Services.Mapper.Offers;
 using Hotel.Services.Mapper.Rooms;
 using Hotel.Services.Rooms;
 using Hotel.Services.Services;
@@ -49,6 +50,7 @@ namespace Hotel_Reservation_System.Web
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<TransactionMiddleware>();
             builder.Services.AddAutoMapper(typeof(RoomDtoProfile).Assembly);
+            builder.Services.AddAutoMapper(typeof(OfferDtoProfile).Assembly);
             builder.Services.AddAutoMapper(typeof(RoomViewModelProfile).Assembly);
             builder.Services.AddAutoMapper(typeof(CommonInfo).Assembly);
 

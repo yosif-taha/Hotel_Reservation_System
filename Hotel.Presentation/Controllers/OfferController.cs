@@ -14,11 +14,11 @@ using Hotel.Services.Dtos.Reservation;
 namespace Hotel.Presentation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class OfferController(IOfferService _offerService, IMapper _mapper) : ControllerBase
     {
         [HttpGet]
-        public async Task<ResponseViewModel> GetAllOffers(GetAllOffersWithPaginationViewModel model)
+        public async Task<ResponseViewModel> GetAllOffers([FromQuery]GetAllOffersWithPaginationViewModel model)
         {
             var validator = new GetAllOffersWithPaginationViewModelValidator().Validate(model);
             if (!validator.IsValid) return new FailedResponseViewModel(ErrorType.InvalidOfferData, "Invalid Offer Data From Request");
@@ -45,7 +45,7 @@ namespace Hotel.Presentation.Controllers
             return new SuccessResponseViewModelT<GetOfferResponseViewModel>(data);
         }
         [HttpPost]
-        public async Task<ResponseViewModel> AddOffer(AddOfferViewModel addOffer)
+        public async Task<ResponseViewModel> AddOffer([FromBody]AddOfferViewModel addOffer)
         {
             var validator = new AddOfferViewModelValidator().Validate(addOffer);
             if (!validator.IsValid) return new FailedResponseViewModel(ErrorType.InvalidOfferData, "Invalid Offer Data From Request !!");
@@ -55,7 +55,7 @@ namespace Hotel.Presentation.Controllers
             return new SuccessResponseViewModel();
         }
         [HttpPut("Update")]
-        public async Task<ResponseViewModel> UpdateOffer(Guid id, UpdateOfferViewModel updateOffer)
+        public async Task<ResponseViewModel> UpdateOffer(Guid id, [FromBody] UpdateOfferViewModel updateOffer)
         {
             var validator = new UpdateOfferViewModelValidator().Validate(updateOffer);
             if (!validator.IsValid) return new FailedResponseViewModel(ErrorType.InvalidOfferData, "Invalid Offer Data From Request !!");
