@@ -11,6 +11,7 @@ namespace Hotel.Presentation.ViewModels.Reservation
     {
         public DateOnly CheckInDate { get; set; }
         public DateOnly CheckOutDate { get; set; }
+        public List<Guid> RoomIds { get; set; } = new();
         public string Status { get; set; }
         public decimal TotalPrice { get; set; }
 

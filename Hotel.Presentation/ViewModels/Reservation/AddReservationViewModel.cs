@@ -11,6 +11,6 @@ namespace Hotel.Presentation.ViewModels.Reservation
         public Guid UserId { get; set; }
         public List<Guid> RoomIds { get; set; } = new();
         public DateOnly? CheckInDate { get; set; }   // optional
-        public int? StayDays { get; set; }           // optional
+        public int StayDays { get; set; } = 5;         // optional
     }
 }
