@@ -29,7 +29,6 @@ namespace Hotel.Persistence.Repositories
         public async Task AddAsync(T entity)
         {
             await  _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
         }
 
         public void Update(T entity, params string[] modifiedParams)

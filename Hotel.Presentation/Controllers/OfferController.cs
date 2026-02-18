@@ -79,9 +79,7 @@ namespace Hotel.Presentation.Controllers
             if (!result.IsSuccess)
                 return new FailedResponseViewModel(ErrorType.InvalidOfferData, "InvalidData");
 
-            var data = _mapper.Map<GetOfferResponseViewModel>(result.Data);
-
-            return new SuccessResponseViewModelT<GetOfferResponseViewModel>(data);
+            return new SuccessResponseViewModel();
         }
 
     }

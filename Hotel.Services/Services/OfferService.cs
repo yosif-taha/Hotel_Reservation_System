@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Services.Services
 {
-    public class OfferService(IGenericRepository<Offer> _offerRepository,IGenericRepository<Room> _roomRepository,IAsyncQueryExecutor _executor,IMapper _mapper) : IOfferService
+    public class OfferService(IGenericRepository<Offer> _offerRepository, IGenericRepository<OfferRoom> _offerRoomRepository, IGenericRepository<Room> _roomRepository, IAsyncQueryExecutor _executor, IMapper _mapper) : IOfferService
     {
         public async Task<ResultT<IEnumerable<GetOfferResponseDto>>> GetAllOffers(GetAllOffersWithPaginationDto dto)
         {
@@ -50,7 +50,7 @@ namespace Hotel.Services.Services
             if (dto is null)
                 return Result.Failure(new Error(ErrorCode.InvalidData, "Model is null"));
             var Data = _mapper.Map<Offer>(dto);
-            var result =  _offerRepository.AddAsync(Data);
+            var result = _offerRepository.AddAsync(Data);
             return Result.Success();
         }
 
@@ -92,29 +92,35 @@ namespace Hotel.Services.Services
             return Result.Success();
         }
 
-        public async Task<ResultT<GetOfferResponseDto>> AssignOfferToRoom(Guid offerId, Guid roomId)
+        public async Task<Result> AssignOfferToRoom(Guid offerId, Guid roomId)
         {
-         
+
             var roomQuery = _roomRepository.GetById(roomId);
             var roomEntity = await _executor.FirstOrDefaultAsync(roomQuery);
             if (roomEntity == null)
-                return ResultT<GetOfferResponseDto>.Failure(new Error(ErrorCode.NotFound, "Room not found !!"));
-
-        
-            var offerResult = await GetOfferByIdAsync(offerId);
-            if (!offerResult.IsSuccess)
-                return ResultT<GetOfferResponseDto>.Failure(new Error(ErrorCode.NotFound, "Offer not found !!"));
-            var offer = offerResult.Data;
+                return Result.Failure(new Error(ErrorCode.NotFound, "Room not found !!"));
 
 
-            if(!roomEntity.OfferRooms.Any(o=>o.OfferId == offerId))
+            var offerQuery = _offerRepository.GetById(offerId);
+            var offerResult = await _executor.FirstOrDefaultAsync(offerQuery);
+            if (offerResult == null)
+                return Result.Failure(new Error(ErrorCode.NotFound, "Offer not found !!"));
+
+
+            var alreadyAssigned = await _executor.AnyAsync(
+            _offerRoomRepository.GetAll().Where(or => or.OfferId == offerId && or.RoomId == roomId));
+
+
+            if (alreadyAssigned)
+                return Result.Failure(new Error(ErrorCode.AlreadyExists, "Offer already assigned to this room"));
+
+            var offerRoom = new OfferRoom
             {
-                roomEntity.OfferRooms.Add(new OfferRoom { OfferId = offerId, RoomId = roomId });
-            }
-            
-            _roomRepository.Update(roomEntity);
-
-            return ResultT<GetOfferResponseDto>.Success(offer);
+                OfferId = offerId,
+                RoomId = roomId
+            };
+           await _offerRoomRepository.AddAsync(offerRoom);
+            return Result.Success("Offer assigned to room successfully");
         }
 
     }

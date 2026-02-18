@@ -11,7 +11,6 @@ namespace Hotel.Services.Mapper.Offers
             CreateMap<Offer, GetOfferResponseDto>()
             .ForMember(des=>des.RoomsId,opt=>opt.MapFrom(src => src.OfferRooms.Select(r=>r.RoomId)));
             CreateMap<AddOfferDto, Offer>();
-
         }
     }
 }
