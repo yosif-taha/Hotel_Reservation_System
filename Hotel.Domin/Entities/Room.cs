@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Domain.Entities
 {
-    public class Room : BaseEntity
+    public class Room : BaseEntity 
     {
         public int RoomNumber { get; set; } 
         public decimal PricePerNight { get; set; }

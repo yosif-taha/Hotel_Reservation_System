@@ -6,10 +6,12 @@ using Hotel.Domain.Contracts;
 using Hotel.Persistence.Data.Contexts;
 using Hotel.Persistence.Executor;
 using Hotel.Persistence.Repositories;
+using Hotel.Presentation;
 using Hotel.Presentation.Controllers;
 using Hotel.Presentation.Mapper.Rooms;
 using Hotel.Presentation.Validations.Rooms;
 using Hotel.Services.Interfaces;
+using Hotel.Services.Mapper.Offers;
 using Hotel.Services.Mapper.Rooms;
 using Hotel.Services.Rooms;
 using Hotel.Services.Services;
@@ -41,13 +43,16 @@ namespace Hotel_Reservation_System.Web
 
             builder.Services.AddScoped<IRoomService,RoomService>();
             builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IOfferService, OfferService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IRoomRepository,RoomRepository>();
             builder.Services.AddScoped<IAsyncQueryExecutor,EfAsyncQueryExecutor>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<TransactionMiddleware>();
             builder.Services.AddAutoMapper(typeof(RoomDtoProfile).Assembly);
+            builder.Services.AddAutoMapper(typeof(OfferDtoProfile).Assembly);
             builder.Services.AddAutoMapper(typeof(RoomViewModelProfile).Assembly);
+            builder.Services.AddAutoMapper(typeof(CommonInfo).Assembly);
 
 
             var app = builder.Build();

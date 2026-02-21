@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hotel.Domain.Entities
+namespace Hotel.Services.Dtos.Offer
 {
-    public class Offer : BaseEntity
+    public class GetOfferResponseDto
     {
-        public string Title { get; set; }
+        public Guid Id { get; set; }
+        public string Title { get; set; } = null!;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal DiscountPercentage { get; set; }
         public bool IsActive { get; set; }
-        public List<OfferRoom> OfferRooms { get; set; } //Navigation Property
-
+        public List<Guid> RoomsId { get; set; } = new List<Guid>();
     }
 }

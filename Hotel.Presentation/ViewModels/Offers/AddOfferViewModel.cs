@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hotel.Domain.Entities
+namespace Hotel.Presentation.ViewModels.Offers
 {
-    public class Offer : BaseEntity
+    public class AddOfferViewModel
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = null!;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal DiscountPercentage { get; set; }
-        public bool IsActive { get; set; }
-        public List<OfferRoom> OfferRooms { get; set; } //Navigation Property
-
+        public List<Guid> RoomIds { get; set; } = new();
     }
 }

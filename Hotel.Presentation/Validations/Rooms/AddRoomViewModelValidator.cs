@@ -30,9 +30,9 @@ namespace Hotel.Presentation.Validations.Rooms
                 .MaximumLength(500)
                 .WithMessage("Description must be at least 10 characters long.");
 
-            RuleFor(x => x.IsAvailable)
-                .NotNull()
-                .WithMessage("Availability status is required.");
+            //RuleFor(x => x.IsAvailable)
+            //    .NotNull()
+            //    .WithMessage("Availability status is required.");
 
             RuleFor(x => x.RoomTypeId)
                 .NotEmpty()
