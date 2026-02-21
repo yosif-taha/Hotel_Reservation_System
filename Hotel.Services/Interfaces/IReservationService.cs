@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hotel.Domain.Contracts
+namespace Hotel.Services.Interfaces
 {
     public interface IReservationService
     {

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hotel.Presentation
+namespace Hotel.Services.Services
 {
-    public static class CommonInfo
+    public class AuthService
     {
-     
+
     }
 }

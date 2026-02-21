@@ -16,7 +16,7 @@ namespace Hotel.Services.Services
 {
     public class OfferService(IGenericRepository<Offer> _offerRepository, IGenericRepository<OfferRoom> _offerRoomRepository, IGenericRepository<Room> _roomRepository, IAsyncQueryExecutor _executor, IMapper _mapper) : IOfferService
     {
-        public async Task<ResultT<IEnumerable<GetOfferResponseDto>>> GetAllOffers(GetAllOffersWithPaginationDto dto)
+        public async Task<ResultT<List<GetOfferResponseDto>>> GetAllOffers(GetAllOffersWithPaginationDto dto)
         {
             var query = _offerRepository.GetAll();
 
@@ -29,7 +29,7 @@ namespace Hotel.Services.Services
             var items = data.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
 
             var result = await _executor.ToListAsync(items);
-            return ResultT<IEnumerable<GetOfferResponseDto>>.Success(result);
+            return ResultT<List<GetOfferResponseDto>>.Success(result);
 
         }
 

@@ -11,7 +11,7 @@ namespace Hotel.Services.Interfaces
 {
     public interface IOfferService
     {
-        Task<ResultT<IEnumerable<GetOfferResponseDto>>> GetAllOffers(GetAllOffersWithPaginationDto dto);
+        Task<ResultT<List<GetOfferResponseDto>>> GetAllOffers(GetAllOffersWithPaginationDto dto);
         Task<ResultT<GetOfferResponseDto>> GetOfferByIdAsync(Guid id);
         Task<Result> AddOfferAsync(AddOfferDto createOfferDto);
         Task<Result> UpdateOfferAsync(Guid id, UpdateOfferDto updateOfferDto);

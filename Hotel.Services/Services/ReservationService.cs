@@ -9,7 +9,7 @@ using Hotel.Services.Interfaces;
 using Hotel.Services.ResultPattern;
 using System.Data;
 
-namespace Hotel.Services.Rooms
+namespace Hotel.Services.Services
 {
     public class ReservationService(IGenericRepository<Reservation> _reservationRepository,IRoomRepository _roomRepository, IAsyncQueryExecutor _executor, IMapper _mapper) : IReservationService
     {

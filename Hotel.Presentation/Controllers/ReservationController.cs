@@ -1,20 +1,12 @@
 ﻿using AutoMapper;
-using Hotel.Domain.Contracts;
-using Hotel.Domain.Entities;
 using Hotel.Presentation.Helpers;
 using Hotel.Presentation.Validations.Reservations;
 using Hotel.Presentation.ViewModels.Reservation;
 using Hotel.Presentation.ViewModels.Response;
-using Hotel.Presentation.ViewModels.Rooms;
 using Hotel.Services.Dtos.Reservation;
-using Hotel.Services.Dtos.Rooms;
+using Hotel.Services.Interfaces;
 using Hotel.Services.ResultPattern;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hotel.Presentation.Controllers
 {

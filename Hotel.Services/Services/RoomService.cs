@@ -13,7 +13,7 @@ using Hotel.Services.Dtos.Rooms;
 using Hotel.Services.ResultPattern;
 using Hotel.Services.Helpers;
 
-namespace Hotel.Services.Rooms
+namespace Hotel.Services.Services
 {
     public class RoomService(IGenericRepository<Room> _repository, IRoomRepository _roomRepository,IAsyncQueryExecutor _executor, IMapper _mapper) : IRoomService
     {
