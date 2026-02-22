@@ -8,9 +8,11 @@ namespace Hotel.Domain.Contracts
 {
     public interface IRoomRepository
     {
+        Task<bool> CheckRoomExistAsync(Guid roomIds);
+        Task<bool> CheckRoomsExistAsync(List<Guid> roomIds);
         Task<bool> ExistsByNumberAsync(int roomNumber);
-        Task<bool> CheckAvailabilityAsync(Guid id, DateTime checkIn, DateTime checkOut);
-        Task<bool> AreRoomsAvailableAsync(IEnumerable<Guid> roomIds, DateTime checkIn, DateTime checkOut);
+        Task<bool> CheckAvailabilityAsync(Guid id, DateOnly checkIn, DateOnly checkOut);
+        Task<bool> AreRoomsAvailableAsync(IEnumerable<Guid> roomIds, DateOnly checkIn, DateOnly checkOut);
         Task<decimal> CalculateTotalPriceAsync(IEnumerable<Guid> roomIds, int numberOfNights);
 
 

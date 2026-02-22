@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Domain.Entities
 {
-    public class OfferRoom
+    public class OfferRoom : BaseEntity
     {
         public Guid RoomId { get; set; } //FK
         public Room Room { get; set; } //Navigation Property

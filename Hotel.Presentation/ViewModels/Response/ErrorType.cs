@@ -24,8 +24,23 @@
         ReservationConflict = 207,
         InvalidReservationId = 208,
         ReservationDateInvalid = 209,
-        ReservationExpired = 210
+        ReservationExpired = 210,
 
-
+        //Offer
+        OfferNotFound = 301,
+        InvalidOfferData = 302,
+        OfferAlreadyExists = 303,
+        OfferCreationFailed = 304,
+        OfferUpdateFailed = 305,
+        OfferCancellationFailed = 306,
+        OfferConflict = 307,
+        InvalidOfferId = 308,
+        OfferDateInvalid = 309,
+        OfferExpired = 310,
+        OfferBusinessError = 311,
+        InvalidFacilityData = 312,
+        FacilityNotFound = 313,
+        FacilityAlreadyExists = 314,
+        InvalidFacilityId = 315
     }
 }

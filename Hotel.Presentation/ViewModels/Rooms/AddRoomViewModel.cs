@@ -10,8 +10,8 @@ namespace Hotel.Presentation.ViewModels.Rooms
     {
         public int RoomNumber { get; set; } 
         public decimal PricePerNight { get; set; }
-        public bool IsAvailable { get; set; }
-        public string Description { get; set; }
+        //public bool IsAvailable { get; set; }
+        public string? Description { get; set; }
         public Guid RoomTypeId { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Hotel.Domain.Contracts
     public interface IGenericRepository<T> where T : BaseEntity
     {
         IQueryable<T> GetAll();
-        IQueryable GetById(Guid id);
+        IQueryable<T?> GetById(Guid id);
         Task AddAsync(T entity);
         void Update(T entity, params string[] modifiedParams);
         void SoftDelete(Guid id);

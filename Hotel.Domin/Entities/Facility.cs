@@ -8,7 +8,9 @@ namespace Hotel.Domain.Entities
 {
     public class Facility : BaseEntity
     {
-        public string Name { get; set; }
-        public ICollection<RoomFacility> RoomFacilities { get; set; } //Navigation Property
+        public string Name { get; set; }=null!;
+        public string? Description { get; set; }
+        public string? IconURL { get; set; }
+        public ICollection<RoomFacility> RoomFacilities { get; set; } = new List<RoomFacility>(); //Navigation Property
     }
 }
