@@ -96,6 +96,15 @@ namespace Hotel.Persistence.Repositories
 
             return total;
         }
+        public Task<bool> CheckRoomExistAsync(Guid roomId)
+        {
+            return _context.Rooms.Where(r => r.Id==roomId).AnyAsync();
+        }
+
+        public Task<bool> CheckRoomsExistAsync(List<Guid> roomIds)
+        {
+            return _context.Rooms.Where(r => roomIds.Contains(r.Id)).AnyAsync();
+        }
 
     }
 }
