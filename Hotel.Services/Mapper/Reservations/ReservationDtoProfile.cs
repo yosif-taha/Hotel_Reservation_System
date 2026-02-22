@@ -28,7 +28,6 @@ namespace Hotel.Services.Mapper.Reservations
             CreateMap<AddReservationDto, Reservation>()
                 .ForMember(des => des.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.ReservationRooms,opt => opt.MapFrom(src =>src.RoomIds.Select(roomID =>new ReservationRoom { RoomId = roomID, NumberOfNights=src.StayDays}).ToList()));
-           
         }
     }
 }

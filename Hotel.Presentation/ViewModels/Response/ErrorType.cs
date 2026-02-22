@@ -37,8 +37,10 @@
         InvalidOfferId = 308,
         OfferDateInvalid = 309,
         OfferExpired = 310,
-        OfferBusinessError = 311
-
-
+        OfferBusinessError = 311,
+        InvalidFacilityData = 312,
+        FacilityNotFound = 313,
+        FacilityAlreadyExists = 314,
+        InvalidFacilityId = 315
     }
 }
