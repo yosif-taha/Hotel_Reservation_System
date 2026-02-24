@@ -43,6 +43,7 @@ namespace Hotel_Reservation_System.Web
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IOfferService, OfferService>();
             services.AddScoped<IFacilityService, FacilityService>();
+            services.AddScoped<IFeedBackService, FeedBackService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAsyncQueryExecutor, EfAsyncQueryExecutor>();
 

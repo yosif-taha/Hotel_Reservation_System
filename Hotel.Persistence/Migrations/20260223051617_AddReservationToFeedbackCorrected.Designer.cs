@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260222044910_addfacilitycolumn")]
-    partial class addfacilitycolumn
+    [Migration("20260223051617_AddReservationToFeedbackCorrected")]
+    partial class AddReservationToFeedbackCorrected
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,8 +71,11 @@ namespace Hotel.Persistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTime?>("CreatedAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -82,12 +85,18 @@ namespace Hotel.Persistence.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("ReservationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("StaffResponse")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime?>("StaffResponseAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -97,11 +106,17 @@ namespace Hotel.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ReservationId")
+                        .IsUnique();
+
                     b.HasIndex("RoomId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Feedbacks", t =>
+                    b.HasIndex("ReservationId", "RoomId")
+                        .IsUnique();
+
+                    b.ToTable("Feedbacks", null, t =>
                         {
                             t.HasCheckConstraint("CK_Feedback_Rating_Range", "[Rating] >= 1 AND [Rating] <= 5");
                         });
@@ -545,6 +560,12 @@ namespace Hotel.Persistence.Migrations
 
             modelBuilder.Entity("Hotel.Domain.Entities.Feedback", b =>
                 {
+                    b.HasOne("Hotel.Domain.Entities.Reservation", "Reservation")
+                        .WithOne()
+                        .HasForeignKey("Hotel.Domain.Entities.Feedback", "ReservationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Hotel.Domain.Entities.Room", "Room")
                         .WithMany("Feedbacks")
                         .HasForeignKey("RoomId")
@@ -556,6 +577,8 @@ namespace Hotel.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Reservation");
 
                     b.Navigation("Room");
 

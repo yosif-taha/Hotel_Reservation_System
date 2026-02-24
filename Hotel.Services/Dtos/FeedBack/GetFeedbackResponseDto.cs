@@ -4,23 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hotel.Domain.Entities
+namespace Hotel.Services.Dtos.FeedBack
 {
-    public class Feedback : BaseEntity
+    public class GetFeedbackResponseDto
     {
-        public int Rating { get; set; }  
+        public int? Rating { get; set; }
+
         public string Comment { get; set; } = null!;
 
+        public DateTime CreatedAt { get; set; }
+
         public string? StaffResponse { get; set; }
+
         public DateTime? StaffResponseAt { get; set; }
 
         public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
-
         public Guid RoomId { get; set; }
-        public Room Room { get; set; } = null!;
-
         public Guid ReservationId { get; set; }
-        public Reservation Reservation { get; set; } = null!;
+
     }
 }

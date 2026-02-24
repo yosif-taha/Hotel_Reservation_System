@@ -41,6 +41,17 @@
         InvalidFacilityData = 312,
         FacilityNotFound = 313,
         FacilityAlreadyExists = 314,
-        InvalidFacilityId = 315
+        InvalidFacilityId = 315,
+
+        // Feedback
+        FeedbackNotFound = 401,
+        InvalidFeedbackData = 402,
+        FeedbackAlreadyExists = 403,
+        FeedbackCreationFailed = 404,
+        FeedbackUpdateFailed = 405,
+        FeedbackDeletionFailed = 406,
+        InvalidFeedbackId = 407,
+        UnauthorizedFeedbackAccess = 408,
+        FeedbackNotAllowed = 409
     }
 }
