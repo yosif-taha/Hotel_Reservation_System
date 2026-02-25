@@ -7,6 +7,7 @@ using Hotel.Presentation.ViewModels.Rooms;
 using Hotel.Services.Dtos.Rooms;
 using Hotel.Services.Interfaces;
 using Hotel.Services.ResultPattern;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System;
@@ -23,6 +24,7 @@ namespace Hotel.Presentation.Controllers
     public class RoomController(IRoomService _roomService, IMapper _mapper) : ControllerBase
     {
         [HttpGet("GetAll")]
+        [Authorize]
         public async Task<ResponseViewModel> GetRooms([FromQuery] GetAllRoomsWithPaginationViewModel model)
         {
             var validator = new GetAllRoomsWithPaginationViewModelValidator().Validate(model);

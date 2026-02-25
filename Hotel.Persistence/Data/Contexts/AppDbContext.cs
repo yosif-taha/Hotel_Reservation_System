@@ -1,4 +1,6 @@
 ﻿using Hotel.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Persistence.Data.Contexts
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) 
             : base(options)
@@ -30,8 +32,6 @@ namespace Hotel.Persistence.Data.Contexts
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -44,12 +44,23 @@ namespace Hotel.Persistence.Data.Contexts
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        { 
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AppUser>().ToTable("User");
+            modelBuilder.Entity<IdentityRole<Guid>>().ToTable("Role");
+            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRole");
+
+            //ignore this tables from mapping to tables in DB
+            modelBuilder.Ignore<IdentityRoleClaim<Guid>>();
+            modelBuilder.Ignore<IdentityUserClaim<Guid>>();
+            modelBuilder.Ignore<IdentityUserToken<Guid>>();
+            modelBuilder.Ignore<IdentityUserLogin<Guid>>();
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // Apply all configurations from the current assembly
             GuidDefaultValue(modelBuilder); // Set default value for Guid Id properties
             CheckIsDeletedQueryFilter(modelBuilder); // Apply global query filter for IsDeleted property
-            base.OnModelCreating(modelBuilder);
+        
         }
 
         private void GuidDefaultValue(ModelBuilder modelBuilder)
