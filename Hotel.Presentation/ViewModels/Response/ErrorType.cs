@@ -41,6 +41,13 @@
         InvalidFacilityData = 312,
         FacilityNotFound = 313,
         FacilityAlreadyExists = 314,
-        InvalidFacilityId = 315
+        InvalidFacilityId = 315,
+
+
+
+        //User
+        UserNotFound = 401,
+        InvalidUserData = 402,
+        RegistrationFailed = 403,
     }
 }

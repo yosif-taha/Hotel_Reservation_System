@@ -14,7 +14,7 @@ namespace Hotel.Domain.Entities
         public string? StaffResponse { get; set; }
 
         public Guid UserId { get; set; } //FK
-        public User User { get; set; } //Navigation Property
+        public AppUser User { get; set; } //Navigation Property
         public Guid RoomId { get; set; } //FK
         public Room Room { get; set; } //Navigation Property
     }

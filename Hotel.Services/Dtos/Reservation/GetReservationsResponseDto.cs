@@ -1,6 +1,5 @@
 ﻿using Hotel.Domin.Entities.Enums;
 using Hotel.Services.Dtos.Rooms;
-using Hotel.Services.Dtos.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;

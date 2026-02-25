@@ -14,7 +14,7 @@ namespace Hotel.Domain.Entities
         public ReservationStatus Status { get; set; }
         public decimal TotalPrice { get; set; }
         public Guid UserId { get; set; } //FK
-        public User User { get; set; } = null!; //Navigation Property
+        public AppUser User { get; set; } = null!; //Navigation Property
         public Payment Payment { get; set; } = null!;//Navigation Property //One to One
         public Invoice Invoice { get; set; } = null!;//Navigation Property //One to One
         public ICollection<ReservationRoom> ReservationRooms { get; set; } = new List<ReservationRoom>(); //Navigation Property
