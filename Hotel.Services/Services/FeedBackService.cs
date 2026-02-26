@@ -100,10 +100,10 @@ namespace Hotel.Services.Services
             var staff = await _executor.FirstOrDefaultAsync(staffQuery);
             if(staff == null)
                 return Result.Failure(new Error(ErrorCode.Unauthorized, "Staff not found."));
-            if (staff.Role.Name != "Staff")
-                return Result.Failure(new Error(ErrorCode.Unauthorized, "Only staff can respond."));
-            if (string.IsNullOrWhiteSpace(dto.StaffResponse))
-                return Result.Failure(new Error(ErrorCode.InvalidData, "Staff response cannot be empty."));
+            //if (staff.Role.Name != "Staff")
+            //    return Result.Failure(new Error(ErrorCode.Unauthorized, "Only staff can respond."));
+            //if (string.IsNullOrWhiteSpace(dto.StaffResponse))
+            //    return Result.Failure(new Error(ErrorCode.InvalidData, "Staff response cannot be empty."));
             feedback.StaffResponse = dto.StaffResponse;
             feedback.StaffResponseAt = DateTime.UtcNow;
              _feedbackRepository.Update(feedback, nameof(feedback.StaffResponse), nameof(feedback.StaffResponseAt));

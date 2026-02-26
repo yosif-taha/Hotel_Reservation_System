@@ -92,13 +92,14 @@ namespace Hotel.Presentation.Controllers
                 if (!validator.IsValid)
                     return new FailedResponseViewModel(ErrorType.InvalidFeedbackData, "Invalid staff response data");
                 var data = _mapper.Map<AddStaffResponseDto>(viewModel);
-                // Get the staff ID from the claims
-                //var staffIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                //if (staffIdClaim == null)
-                //    throw new UnauthorizedAccessException();
-                // Convert the staff ID from the claim to a Guid
-                //var staffId = Guid.Parse(staffIdClaim.Value);
-                var result = await _feedBackService.AddStaffResponse(feedbackId, data, /*staffId*/ Guid.Parse("55470d87-7908-486c-aad6-0bac12a7325a"));
+             //   Get the staff ID from the claims
+
+               var staffIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (staffIdClaim == null)
+                    throw new UnauthorizedAccessException();
+               // Convert the staff ID from the claim to a Guid
+                var staffId = Guid.Parse(staffIdClaim.Value);
+                var result = await _feedBackService.AddStaffResponse(feedbackId, data, staffId /*Guid.Parse("55470d87-7908-486c-aad6-0bac12a7325a")*/);
                 if (!result.IsSuccess)
                     return new FailedResponseViewModel(ErrorType.InvalidFeedbackData, result.Message);
                 return new SuccessResponseViewModel();
