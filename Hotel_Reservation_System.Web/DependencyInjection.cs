@@ -1,11 +1,13 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hotel.Domain.Contracts;
+using Hotel.Domain.Entities;
 using Hotel.Persistence.Data.Contexts;
 using Hotel.Persistence.Executor;
 using Hotel.Persistence.Repositories;
 using Hotel.Presentation;
 using Hotel.Presentation.Controllers;
+using Hotel.Presentation.Mapper.Account;
 using Hotel.Presentation.Mapper.Rooms;
 using Hotel.Services.Interfaces;
 using Hotel.Services.Mapper.Facilities;
@@ -15,6 +17,7 @@ using Hotel.Services.Rooms;
 using Hotel.Services.Services;
 using Hotel_Reservation_System.Web.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
@@ -46,11 +49,13 @@ namespace Hotel_Reservation_System.Web
             services.AddScoped<IFeedBackService, FeedBackService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAsyncQueryExecutor, EfAsyncQueryExecutor>();
+            services.AddScoped<IAccountServices, AccountServices>();
 
             services
                 .AddSwaggerConfiguration()
                 .AddMapperConfiguration()
                 .AddFluentValidationConfiguration()
+                .AddIdentityServices()
                 .AddAuthenticationConfiguration(configuration);
            
 
@@ -68,6 +73,7 @@ namespace Hotel_Reservation_System.Web
             services.AddAutoMapper(typeof(OfferDtoProfile).Assembly);
             services.AddAutoMapper(typeof(RoomViewModelProfile).Assembly);
             services.AddAutoMapper(typeof(FacilityDtoProfile).Assembly);
+            services.AddAutoMapper(typeof(AccountViewModelProfile).Assembly);
             services.AddAutoMapper(typeof(CommonInfo).Assembly);
             return services;
         }
@@ -77,9 +83,21 @@ namespace Hotel_Reservation_System.Web
                 .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             return services;
         }
+
+        private static IServiceCollection AddIdentityServices(this IServiceCollection services)
+        {
+            services.AddIdentityCore<AppUser>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddRoles<IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders(); ;
+            return services;
+        }
+
         public static IServiceCollection AddAuthenticationConfiguration(this IServiceCollection services,IConfiguration configuration)
         {
-            var secretKey = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]);
+            var secretKey = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
 
             services.AddAuthentication(opt => opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -93,6 +111,7 @@ namespace Hotel_Reservation_System.Web
                         ValidIssuer = configuration["Jwt:Issuer"],
                         ValidAudience = configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(secretKey)
+                 
                     };
                 });
             services.AddAuthorization();

@@ -44,14 +44,14 @@
         InvalidFacilityId = 315,
 
         // Feedback
-        FeedbackNotFound = 401,
-        InvalidFeedbackData = 402,
-        FeedbackAlreadyExists = 403,
-        FeedbackCreationFailed = 404,
-        FeedbackUpdateFailed = 405,
-        FeedbackDeletionFailed = 406,
-        InvalidFeedbackId = 407,
-        UnauthorizedFeedbackAccess = 408,
-        FeedbackNotAllowed = 409
+        FeedbackNotFound = 501,
+        InvalidFeedbackData = 502,
+        FeedbackAlreadyExists = 503,
+        FeedbackCreationFailed = 504,
+        FeedbackUpdateFailed = 505,
+        FeedbackDeletionFailed = 506,
+        InvalidFeedbackId = 507,
+        UnauthorizedFeedbackAccess = 508,
+        FeedbackNotAllowed = 509
     }
 }
