@@ -16,6 +16,7 @@ namespace Hotel.Presentation.Mapper.Feedback
             CreateMap<AddFeedBackViewModel, AddFeedBackDto>();
             CreateMap<GetAllFeedbacksWithPaginationViewModel, GetAllFeedbackWithPaginationDto>();
              CreateMap<GetFeedbackResponseDto, GetFeedbackResponseViewModel>();
+             CreateMap<AddStaffResponseViewModel, AddStaffResponseDto>();
         }
     }
 }

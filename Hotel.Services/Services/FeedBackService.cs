@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Services.Services
 {
-    public class FeedBackService(IGenericRepository<Feedback> _feedbackRepository, IGenericRepository<Reservation> _reservationRepository, IMapper _mapper, IAsyncQueryExecutor _executor) : IFeedBackService
+    public class FeedBackService(IGenericRepository<User> _userRepository, IGenericRepository<Feedback> _feedbackRepository, IGenericRepository<Reservation> _reservationRepository, IMapper _mapper, IAsyncQueryExecutor _executor) : IFeedBackService
     {
         public async Task<ResultT<IEnumerable<GetFeedbackResponseDto>>> GetAllFeedbackAsync(GetAllFeedbackWithPaginationDto getAllFeedbackWithPaginationDto)
         {
@@ -83,9 +83,31 @@ namespace Hotel.Services.Services
             if (feedback == null)
                 return Result.Failure(new Error(ErrorCode.NotFound, "Feedback not found."));
             if (feedback.UserId != userId)
-                return Result.Failure(new Error(ErrorCode.NotAvailable, "You are not authorized to delete this feedback."));
+                return Result.Failure(new Error(ErrorCode.Unauthorized, "You are not authorized to delete this feedback."));
             _feedbackRepository.SoftDelete(feedbackId);
             return Result.Success("Feedback deleted successfully.");
+
+        }
+
+        public async Task<Result> AddStaffResponse(Guid feedbackId, AddStaffResponseDto dto, Guid staffId)
+        {
+            var feedbackQuery = _feedbackRepository.GetById(feedbackId);
+            var feedback = await _executor.FirstOrDefaultAsync(feedbackQuery);
+            if (feedback == null)
+                return Result.Failure(new Error(ErrorCode.NotFound, "Feedback not found."));
+            // check if the user is staff
+            var staffQuery = _userRepository.GetById(staffId, s => s.Role);
+            var staff = await _executor.FirstOrDefaultAsync(staffQuery);
+            if(staff == null)
+                return Result.Failure(new Error(ErrorCode.Unauthorized, "Staff not found."));
+            if (staff.Role.Name != "Staff")
+                return Result.Failure(new Error(ErrorCode.Unauthorized, "Only staff can respond."));
+            if (string.IsNullOrWhiteSpace(dto.StaffResponse))
+                return Result.Failure(new Error(ErrorCode.InvalidData, "Staff response cannot be empty."));
+            feedback.StaffResponse = dto.StaffResponse;
+            feedback.StaffResponseAt = DateTime.UtcNow;
+             _feedbackRepository.Update(feedback, nameof(feedback.StaffResponse), nameof(feedback.StaffResponseAt));
+             return Result.Success("Staff response added successfully.");
 
         }
     }

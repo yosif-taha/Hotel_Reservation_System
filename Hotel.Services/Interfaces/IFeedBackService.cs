@@ -14,5 +14,6 @@ namespace Hotel.Services.Interfaces
         public Task<ResultT<GetFeedbackResponseDto>> GetFeedbackByIdAsync(Guid feedbackId);
         public Task<Result> AddFeedBackAsync(AddFeedBackDto addFeedBackDto, Guid userId);
         public Task<Result> DeleteFeedBackAsync(Guid feedbackId, Guid userId);
+        public Task<Result> AddStaffResponse(Guid feedbackId, AddStaffResponseDto dto, Guid staffId);
     }
 }
