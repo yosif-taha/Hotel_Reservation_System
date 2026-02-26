@@ -43,11 +43,15 @@
         FacilityAlreadyExists = 314,
         InvalidFacilityId = 315,
 
-
-
-        //User
-        UserNotFound = 401,
-        InvalidUserData = 402,
-        RegistrationFailed = 403,
+        // Feedback
+        FeedbackNotFound = 501,
+        InvalidFeedbackData = 502,
+        FeedbackAlreadyExists = 503,
+        FeedbackCreationFailed = 504,
+        FeedbackUpdateFailed = 505,
+        FeedbackDeletionFailed = 506,
+        InvalidFeedbackId = 507,
+        UnauthorizedFeedbackAccess = 508,
+        FeedbackNotAllowed = 509
     }
 }

@@ -20,10 +20,14 @@ namespace Hotel.Persistence.Repositories
             return result;
         }
 
-        public  IQueryable<T?> GetById(Guid id)
+        public  IQueryable<T?> GetById(Guid id,params Expression<Func<T, object>>[] includes)
         {
-         var result = _context.Set<T>().Where(x => x.Id == id);
-           return result;
+         var query = _context.Set<T>().Where(x => x.Id == id);
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+           return query;
         }
 
         public async Task AddAsync(T entity)

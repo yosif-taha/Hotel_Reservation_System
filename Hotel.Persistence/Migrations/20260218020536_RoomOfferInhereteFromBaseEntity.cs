@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hotel.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class addfacilitycolumn : Migration
+    public partial class RoomOfferInhereteFromBaseEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,18 +36,6 @@ namespace Hotel.Persistence.Migrations
                 table: "OfferRoom",
                 type: "datetime2",
                 nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Description",
-                table: "Facilities",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "IconURL",
-                table: "Facilities",
-                type: "nvarchar(max)",
-                nullable: true);
         }
 
         /// <inheritdoc />
@@ -68,14 +56,6 @@ namespace Hotel.Persistence.Migrations
             migrationBuilder.DropColumn(
                 name: "UpdatedAt",
                 table: "OfferRoom");
-
-            migrationBuilder.DropColumn(
-                name: "Description",
-                table: "Facilities");
-
-            migrationBuilder.DropColumn(
-                name: "IconURL",
-                table: "Facilities");
         }
     }
 }
